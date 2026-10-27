@@ -96,13 +96,6 @@ Commit messages follow a simple convention: `feat:`, `fix:`, `style:`, `docs:`, 
 
 All code, comments and documentation are written in English.
 
-## Team
-
-| Name | GitHub |
-|------|--------|
-| TODO | [@user](https://github.com/user) |
-| TODO | [@user](https://github.com/user) |
-
 ## License
 
 This project was created for educational purposes.
