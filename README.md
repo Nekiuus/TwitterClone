@@ -1,21 +1,108 @@
-<<<<<<< HEAD
-# React + Vite
+# X Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clone of the social network X (formerly Twitter), built as a Single Page Application (SPA) with React. Users will be able to sign up, log in, publish tweets, follow other users and see the tweets of the people they follow.
 
-Currently, two official plugins are available:
+> University course project. Current status: **Milestone 1 – Layout and SPA structure**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
 
-## React Compiler
+- [React](https://react.dev/) – UI library
+- [Vite](https://vitejs.dev/) – build tool and dev server
+- [styled-components](https://styled-components.com/) – component styling <!-- TODO: confirm -->
+- [Firebase](https://firebase.google.com/) – authentication and database (Milestones 2 and 3)
+- [ESLint](https://eslint.org/) – code linting
+- Git and GitHub – version control
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+### Milestone 1 – Layout (in progress)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# TwitterClone
-X (Twitter) clone built as a React SPA with Vite and Firebase. Users can sign up, log in, post tweets, follow other users and browse a feed. University course project.
->>>>>>> 22f148c52f97fb7c8851d7869a4c491e42fccf81
+- [x] Sidebar navigation
+- [x] Home feed layout with tweet box and posts
+- [ ] Widgets column
+- [ ] Sign up page
+- [ ] Log in page
+- [ ] Publish tweet page
+- [ ] Following list (10 users per page)
+- [ ] Followers list (10 users per page)
+- [ ] User tweets page
+- [ ] Feed page
+- [ ] Common header (logo, username, log out)
+
+### Milestone 2 – User features and tweets (planned)
+
+- [ ] User registration with unique username and email
+- [ ] Log in with username/password and Google
+- [ ] Publish tweets (max. 280 characters)
+- [ ] Follow users by username
+
+### Milestone 3 – Following and lists (planned)
+
+- [ ] Paginated followers and following lists
+- [ ] Follow button on user pages
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (LTS version)
+- [Yarn](https://yarnpkg.com/)
+
+### Installation
+
+```bash
+git clone https://github.com/USERNAME/REPO-NAME.git
+cd REPO-NAME
+yarn install
+```
+
+### Environment variables
+
+Copy the example file and fill in your Firebase credentials:
+
+```bash
+cp .env.example .env
+```
+
+### Run the project
+
+```bash
+yarn dev        # start the development server
+yarn build      # create a production build
+yarn lint       # run ESLint
+```
+
+## Project Structure
+
+```
+src/
+├── assets/          # Images and static files
+├── components/
+│   ├── Home/        # Feed, TweetBox and Post components
+│   ├── Sidebar/     # Navigation sidebar and IconOption
+│   └── Widgets/     # Right-hand widgets column
+├── App.jsx
+└── main.jsx
+```
+
+## Git Workflow
+
+- `main`: stable code, only updated through pull requests
+- `develop`: integration branch
+- `feature/*`: new features (e.g. `feature/login-page`)
+- `fix/*`: bug fixes
+
+Commit messages follow a simple convention: `feat:`, `fix:`, `style:`, `docs:`, `refactor:`, `chore:`.
+
+All code, comments and documentation are written in English.
+
+## Team
+
+| Name | GitHub |
+|------|--------|
+| TODO | [@user](https://github.com/user) |
+| TODO | [@user](https://github.com/user) |
+
+## License
+
+This project was created for educational purposes.
