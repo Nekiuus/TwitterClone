@@ -19,7 +19,8 @@ A clone of the social network X (formerly Twitter), built as a Single Page Appli
 
 - [x] Sidebar navigation
 - [x] Home feed layout with tweet box and posts
-- [ ] Widgets column
+- [x] Widgets column
+- [x] Video support in posts
 - [ ] Sign up page
 - [ ] Log in page
 - [ ] Publish tweet page
