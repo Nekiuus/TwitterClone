@@ -1,40 +1,38 @@
-import React from 'react'
-import { Avatar, PostBody, PostContainer, PostDescription, PostFooter, PostActionIcon, Images } from './styled'
-import VerifiedIcon from '@mui/icons-material/Verified';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
-import reply from '../../assets/reply.png';
-import retweet from '../../assets/retweet.png';
+import { Avatar, PostBody, PostContainer, PostDescription, PostFooter, PostActionIcon, Images, Video } from './styled'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import VerifiedIcon from '@mui/icons-material/Verified'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'
+import reply from '../../assets/reply.png'
+import retweet from '../../assets/retweet.png'
 
-export const Post = () => {
+export const Post = ({ name, username, time, text, image, video, type, replies, reposts, likes, views, avatar }) => {
   return (
-      <PostContainer>
-        <div className="post">
-        <Avatar src="https://randomuser.me/api/portraits/men/70.jpg" alt="User Avatar" />
-        </div>
-      
-  
-    <PostBody>
-        <div>
-            <div>
-                <h3>Jason <span>
-                    <VerifiedIcon className="verified-icon"/>
-                    @jason</span></h3>
-                
-            <PostDescription>
-                <p>post description goes here. This is a sample post to demonstrate the layout of a post in the Twitter clone application.</p>
-            </PostDescription>
-            </div>
-            <Images src="https://media1.tenor.com/m/xE-3Qec4KS0AAAAd/hi-lizard.gif" alt="Post Image" />
-            <PostFooter>
-                <PostActionIcon className="action-reply" $icon={reply} role="img" aria-label="Responder" />
-                <PostActionIcon className="action-retweet" $icon={retweet} role="img" aria-label="Repostear" />
-                <FavoriteBorderIcon className="action-favorite" fontSize="small" aria-label="Me gusta" />
-                <SignalCellularAltIcon className="action-views" fontSize="small" aria-label="Visualizaciones" />
+    <PostContainer>
+      <Avatar src={avatar} alt={`${name} avatar`} />
+      <PostBody>
+        <div className="post-content">
+          <div className="post-header">
+            <h3>{name}<VerifiedIcon className="verified-icon" /><span>{username} · {time}</span></h3>
+            <MoreHorizIcon className="post-menu" />
+          </div>
 
-            </PostFooter>
+          <PostDescription><p>{text}</p></PostDescription>
+          
+          {type === 'video' ? (
+            <Video src={video} controls />
+            ) : (
+            <Images src={image} alt="Post" />
+            )}
+
+          <PostFooter>
+            <span className="reply-action"><PostActionIcon className="post-action-icon" $icon={reply} role="img" aria-label="Replies" />{replies}</span>
+            <span className="repost-action"><PostActionIcon className="post-action-icon" $icon={retweet} role="img" aria-label="Reposts" />{reposts}</span>
+            <span className="like-action"><FavoriteBorderIcon />{likes}</span>
+            <span className="view-action"><BarChartOutlinedIcon />{views}</span>
+          </PostFooter>
         </div>
-    </PostBody>
+      </PostBody>
     </PostContainer>
   )
 }

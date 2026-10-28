@@ -1,5 +1,4 @@
-import React from 'react'
-import { Container } from './styled'
+import { Container } from './styled';
 import XIcon from '@mui/icons-material/X';
 import { IconOption } from './IconOption';
 import { AccountBox } from './IconOption';
@@ -11,6 +10,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ListIcon from '@mui/icons-material/List';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import HistoryIcon from '@mui/icons-material/History';
 import { Button } from '@mui/material';
 
 
@@ -25,8 +25,10 @@ export const Sidebar = () => {
        <IconOption Icon={ForwardToInboxIcon} text="Messages"/>
        <IconOption Icon={BookmarkBorderIcon} text="Bookmarks"/>
        <IconOption Icon={ListIcon} text="List"/>
+       <IconOption Icon={HistoryIcon} text="History"/>
        <IconOption Icon={PermIdentityIcon} text="Profile"/>
        <IconOption Icon={MoreHorizIcon} text="More"/>
+       
 
 
     <Button variant="outlined" fullWidth>

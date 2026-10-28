@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import React from 'react'
 import GlobalStyles from './assets/styles/GlobalStyles'
 import { Sidebar } from './components/Sidebar'
 import { Home } from './components/Home'
