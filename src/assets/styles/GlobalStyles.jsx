@@ -65,7 +65,7 @@ body {
 }
 
 #root {
-  width: 1250px;
+  width: 1280px;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -124,6 +124,9 @@ code {
   display: flex;
   width: 100%;
   flex: 1;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
   box-sizing: border-box;
   border: 1px solid red;
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { ProfileAvatar, ProfileBox, SidebarIcon } from './styled';
 import avatar from '../../assets/avatar.jpeg';
 
@@ -18,6 +17,10 @@ export const AccountBox = () => {
   return (
     <ProfileBox>
       <ProfileAvatar src={avatar} alt="User Avatar" />
+      <div>
+        <strong>Tiger Eye</strong>
+        <span>@tigercooleyes12</span>
+      </div>
     </ProfileBox>
   )
 }
