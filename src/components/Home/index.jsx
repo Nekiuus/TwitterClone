@@ -65,4 +65,4 @@ export const Home = () => {
       {posts.map((post) => <Post key={post.id} {...post} />)}
     </Container>
   )
-}
+} 
