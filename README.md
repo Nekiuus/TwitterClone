@@ -21,13 +21,13 @@ A clone of the social network X (formerly Twitter), built as a Single Page Appli
 - [x] Home feed layout with tweet box and posts
 - [x] Widgets column
 - [x] Video support in posts
-- [ ] Sign up page
-- [ ] Log in page
+- [X] Sign up page
+- [X] Log in page
 - [ ] Publish tweet page
 - [ ] Following list (10 users per page)
 - [ ] Followers list (10 users per page)
 - [ ] User tweets page
-- [ ] Feed page
+- [X] Feed page
 - [ ] Common header (logo, username, log out)
 
 ### Milestone 2 – User features and tweets (planned)
