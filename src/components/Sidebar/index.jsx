@@ -14,7 +14,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import { Button } from '@mui/material';
 
 
-export const Sidebar = () => {
+export const Sidebar = ({ user }) => {
   return (
     <Container>
         <XIcon className="twitter-logo"/>
@@ -35,7 +35,7 @@ export const Sidebar = () => {
       Post
     </Button>
 
-    <AccountBox/>
+    <AccountBox user={user} />
     
    
     </Container>
