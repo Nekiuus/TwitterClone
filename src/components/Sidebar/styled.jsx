@@ -10,6 +10,7 @@ height: 100vh;
 box-sizing: border-box;
 display: flex;
 flex-direction: column;
+
 >.twitter-logo{
     display: block;
     margin: 8px 4px;
@@ -30,6 +31,7 @@ flex-direction: column;
     font-size: 18px;
     margin-top: 20px;
     font-family: var(--heading);
+
 }
 `
 export const ProfileBox = styled.div`
@@ -52,6 +54,7 @@ export const ProfileMenuButton = styled.button`
     background: transparent;
     text-align: left;
     cursor: pointer;
+
 
     &:hover {
         background-color: var(--Hover);
@@ -119,6 +122,7 @@ export const SidebarIcon = styled.div`
     width: fit-content;
     align-items: center;
     padding: 14px 10px;
+    cursor: pointer;
 >h2{
     font-size: 20px;
     margin: 0 15px 0 20px;

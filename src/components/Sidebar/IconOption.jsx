@@ -3,9 +3,9 @@ import { ProfileAvatar, ProfileBox, ProfileMenu, ProfileMenuButton, SidebarIcon 
 import avatar from '../../assets/avatar.jpeg';
 import { handleLogout } from '../../Config';
 
-export const IconOption = ({ Icon, text }) => {
+export const IconOption = ({ Icon, text, onClick }) => {
   return (
-    <SidebarIcon>
+    <SidebarIcon onClick={onClick}>
         <Icon />
         <h2>{text}</h2>
     </SidebarIcon>
