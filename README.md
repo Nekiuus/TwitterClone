@@ -23,10 +23,10 @@ A clone of the social network X (formerly Twitter), built as a Single Page Appli
 - [x] Video support in posts
 - [X] Sign up page
 - [X] Log in page
-- [ ] Publish tweet page
-- [ ] Following list (10 users per page)
-- [ ] Followers list (10 users per page)
-- [ ] User tweets page
+- [x] Publish tweet page
+- [x] Following list (10 users per page)
+- [x] Followers list (10 users per page)
+- [x] User tweets page
 - [X] Feed page
 - [ ] Common header (logo, username, log out)
 
