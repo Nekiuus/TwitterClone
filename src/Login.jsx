@@ -10,6 +10,7 @@ export const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showSignup, setShowSignup] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => setFormVisible(true), 100)
@@ -45,13 +46,14 @@ export const Login = () => {
 
               <button type="button" onClick={() => handleGoogleLogin(setError)} className="flex w-full items-center justify-center gap-3 rounded-full bg-white py-3 font-bold text-[#0f1419] transition hover:bg-gray-200"><FcGoogle className="h-6 w-6" />Continue with Google</button>
 
-              <p className="mt-5 text-center text-xs leading-snug text-gray-500">By continuing, you agree to our <a href="#terms" className="text-cyan-400 hover:underline">Terms of Service</a>, <a href="#privacy" className="text-cyan-400 hover:underline">Privacy Policy</a> and <a href="#cookies" className="text-cyan-400 hover:underline">Cookie Use</a>.</p>
+              <p className="mt-5 text-center text-xs leading-snug text-gray-500">By continuing, you agree to our <a href="#terms" className="text-cyan-400 hover:underline">Terms of Service</a>, <a href="#privacy" className="text-cyan-400 hover:underline">Privacy Policy</a> and <a href="#cookies" className="text-cyan-400 hover:underline">Cookie Use</a>. <button type="button" onClick={() => setShowSignup(true)} className="text-cyan-400 hover:underline">Sign up</button></p>
             </div>
           </div>
 
           <div className="login-brand relative grid min-h-[560px] flex-1 place-items-center max-[800px]:hidden" aria-hidden="true"><div className="login-x-glow" /><XIcon className="login-x-icon" /></div>
         </div>
       </div>
+      {showSignup && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" onClick={() => setShowSignup(false)}><div className="relative w-full max-w-[500px] rounded-3xl bg-[#16181c] p-10 text-white shadow-2xl" onClick={(event) => event.stopPropagation()}><button type="button" onClick={() => setShowSignup(false)} className="absolute left-5 top-4 text-2xl text-gray-300 hover:text-white">←</button><XIcon className="mx-auto mb-8 h-10 w-10" /><h2 className="mb-8 text-center text-3xl font-bold">Sign up</h2><form className="space-y-4" onSubmit={(event) => event.preventDefault()}><input type="email" placeholder="Email address" className="w-full rounded-md border border-gray-600 bg-transparent px-3 py-4 text-white outline-none placeholder:text-gray-500 focus:border-cyan-400" /><input type="password" placeholder="Password" className="w-full rounded-md border border-gray-600 bg-transparent px-3 py-4 text-white outline-none placeholder:text-gray-500 focus:border-cyan-400" /><button type="submit" className="w-full rounded-full bg-[#eff3f4] py-3 font-bold text-[#0f1419]">Continue</button></form></div></div>}
     </>
   )
 }

@@ -10,6 +10,7 @@ import { Login } from './Login'
 function App() {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [currentView, setCurrentView] = useState('home')
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -32,10 +33,10 @@ function App() {
     <>
       <div className="App">
         {/*Sidebar */}
-        <Sidebar user={user} />
+        <Sidebar user={user} onNavigate={setCurrentView} />
 
         {/*Home */}
-        <Home />
+        <Home currentView={currentView} onNavigate={setCurrentView} />
 
         {/*Widgets */}
         <Widgets />
