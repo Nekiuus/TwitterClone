@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components';
+
 
 export const Container = styled.div`
   flex: 0 0 47%;
@@ -16,6 +17,16 @@ export const Container = styled.div`
 
   -ms-overflow-style: none;
   scrollbar-width: none;
+
+  @media only screen and (max-width: 1280px){
+  flex: 0.55;
+  }
+  @media only screen and (max-width: 1004px){
+  flex: 0.95;
+  }
+  @media only screen and (max-width: 500px){
+  flex: 1;
+  }
 `
 
 export const Header = styled.header`
@@ -129,6 +140,19 @@ export const DivBox = styled.div`
     cursor: pointer;
   }
 `
+
+export const File = styled.input`
+  max-width: 35px;
+  position: absolute;
+  z-index: 10;
+  padding-top: 10px;
+  opacity: 0;
+ ${props => props.primary && css `
+    margin-left: 55px;
+  `}
+`
+
+/*POST*/
 
 export const PostBody = styled.div`
   padding-left: 10px;
@@ -259,4 +283,6 @@ export const Video = styled.video`
   border-radius: 20px;
   object-fit: cover;
   background: #000;
+
+  
 `

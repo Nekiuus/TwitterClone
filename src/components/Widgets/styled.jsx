@@ -13,6 +13,14 @@ box-sizing: border-box;
 -ms-overflow-style: none;
 scrollbar-width: none;
 
+ @media only screen and (max-width: 1280px){
+  flex: 0.4;
+  }
+  @media only screen and (max-width: 1004px){
+  display: none;
+  }
+ 
+
 `
 
 export const Header = styled.header`

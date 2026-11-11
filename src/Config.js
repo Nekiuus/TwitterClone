@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
   browserLocalPersistence,
@@ -9,7 +8,8 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB8PrcQ5-XRUiir7xWl6L8gnRg1_NcxlE4",
@@ -27,6 +27,11 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const authPersistence = setPersistence(auth, browserLocalPersistence);
 const handleLogout = () => signOut(auth);
+
+// Firebase Storage
+export const db = getFirestore(app);
+const storage = getStorage(app);
+export { storage, app as default };
 
 // HANDLE GOOGLE LOGIN
 const handleGoogleLogin = async (setError) => {

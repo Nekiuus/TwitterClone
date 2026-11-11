@@ -30,10 +30,10 @@ export const Sidebar = ({ user, onNavigate }) => {
       <IconOption Icon={NotificationsNoneIcon} text="Notifications"/>
        <IconOption Icon={ForwardToInboxIcon} text="Messages"/>
        <IconOption Icon={BookmarkBorderIcon} text="Bookmarks"/>
-       <IconOption Icon={ListIcon} text="List"/>
-       <IconOption Icon={HistoryIcon} text="History"/>
+       <IconOption primary Icon={ListIcon} text="List"/>
+       <IconOption primary Icon={HistoryIcon} text="History"/>
        <IconOption Icon={PermIdentityIcon} text="Profile" onClick={() => onNavigate('profile')}/>
-       <IconOption Icon={MoreHorizIcon} text="More"/>
+       <IconOption primary Icon={MoreHorizIcon} text="More"/>
        
 
 
