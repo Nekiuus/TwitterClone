@@ -28,13 +28,13 @@ A clone of the social network X (formerly Twitter), built as a Single Page Appli
 - [x] Followers list (10 users per page)
 - [x] User tweets page
 - [X] Feed page
-- [ ] Common header (logo, username, log out)
+- [X] (logo, username, log out)
 
 ### Milestone 2 – User features and tweets (planned)
 
 - [ ] User registration with unique username and email
-- [ ] Log in with username/password and Google
-- [ ] Publish tweets (max. 280 characters)
+- [X] Log in with username/password and Google
+- [X] Publish tweets (max. 280 characters)
 - [ ] Follow users by username
 
 ### Milestone 3 – Following and lists (planned)
