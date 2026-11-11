@@ -1,29 +1,94 @@
 import avatar from '../../assets/avatar.jpeg'
-import { TweetBoxContainer, Div, Avatar, Form, DivBox } from './styled'
+import { TweetBoxContainer, Div, Avatar, Form, DivBox, File } from './styled'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import GifBoxOutlinedIcon from '@mui/icons-material/GifBoxOutlined'
 import PollOutlinedIcon from '@mui/icons-material/PollOutlined'
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
 import { Button } from '@mui/material'
+import { useState } from 'react'
+import { useMedia } from '../../contexts/useMedia'
+import { auth } from '../../Config'
 
 export const TweetBox = () => {
+  const { selectedMedia, saveMedia, publishPost } = useMedia()
+  const [text, setText] = useState('')
+
+  const handleMediaChange = (event) => {
+    const file = event.currentTarget.files?.[0]
+    event.currentTarget.value = ''
+
+    if (!file) return
+
+    if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+      console.error('Selecciona una imagen o un video.')
+      return
+    }
+
+    const media = saveMedia(file)
+    console.log('Medio guardado localmente en el contexto de React:', {
+      name: media.name,
+      type: media.type,
+      size: media.size,
+      url: media.url,
+    })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const user = auth.currentUser
+    const emailName = user?.email?.split('@')[0]
+    publishPost({
+      name: user?.displayName || emailName || 'You',
+      username: user?.email ? `@${emailName}` : '@you',
+      avatar: user?.photoURL || avatar,
+      text: text.trim(),
+    })
+    setText('')
+  }
+
   return (
     <TweetBoxContainer>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Div>
           <Avatar src={avatar} alt="User Avatar" />
-          <input type="text" placeholder="What's happening?" />
+          <input
+            type="text"
+            placeholder="What's happening?"
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+          />
+
         </Div>
         <Div className="tweet-actions">
           <DivBox>
-            <ImageOutlinedIcon />
+            <label
+              htmlFor="tweet-media"
+              aria-label="Seleccionar imagen o video"
+              style={{ position: 'relative', display: 'inline-flex', cursor: 'pointer' }}
+            >
+              <ImageOutlinedIcon />
+              <File
+                id="tweet-media"
+                type="file"
+                accept="image/*,video/*"
+                onChange={handleMediaChange}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', maxWidth: 'none', padding: 0 }}
+              />
+            </label>
             <GifBoxOutlinedIcon />
             <PollOutlinedIcon />
             <SentimentSatisfiedAltOutlinedIcon />
             <CalendarMonthOutlinedIcon />
           </DivBox>
-          <Button variant="contained">Post</Button>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={!text.trim() && !selectedMedia}
+          >
+            Post
+          </Button>
         </Div>
       </Form>
     </TweetBoxContainer>

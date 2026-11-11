@@ -3,6 +3,7 @@ import { Container, Header } from './styled'
 import { TweetBox } from './TweetBox'
 import { Post } from './Post'
 import { Profile } from '../Profile'
+import { useMedia } from '../../contexts/useMedia'
 
 const posts = [
   
@@ -66,6 +67,7 @@ const followingPosts = [
 
 export const Home = ({ currentView, onNavigate }) => {
   const [activeTab, setActiveTab] = useState('for-you')
+  const { posts: localPosts } = useMedia()
 
   if (currentView === 'profile') {
     return <Profile onNavigate={onNavigate} />
@@ -80,7 +82,9 @@ export const Home = ({ currentView, onNavigate }) => {
 
       <TweetBox />
 
-      {(activeTab === 'following' ? followingPosts : posts).map((post) => <Post key={post.id} {...post} />)}
+      {[...localPosts, ...(activeTab === 'following' ? followingPosts : posts)].map((post) => (
+        <Post key={post.id} {...post} />
+      ))}
     </Container>
   )
 } 

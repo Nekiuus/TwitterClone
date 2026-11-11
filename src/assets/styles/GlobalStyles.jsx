@@ -76,6 +76,12 @@ body {
   box-sizing: border-box;
 }
 
+@media (min-width: 800px) and (max-width: 1004px) {
+  #root {
+    width: calc(100% - 120px);
+  }
+}
+
 h1,
 h2 {
   font-family: var(--heading);

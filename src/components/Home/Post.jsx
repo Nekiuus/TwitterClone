@@ -19,11 +19,8 @@ export const Post = ({ name, username, time, text, image, video, type, replies, 
 
           <PostDescription><p>{text}</p></PostDescription>
           
-          {type === 'video' ? (
-            <Video src={video} controls />
-            ) : (
-            <Images src={image} alt="Post" />
-            )}
+          {type === 'video' && video && <Video src={video} controls />}
+          {type !== 'video' && image && <Images src={image} alt="Post" />}
 
           <PostFooter>
             <span className="reply-action"><PostActionIcon className="post-action-icon" $icon={reply} role="img" aria-label="Replies" />{replies}</span>

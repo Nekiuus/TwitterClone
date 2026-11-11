@@ -33,6 +33,35 @@ flex-direction: column;
     font-family: var(--heading);
 
 }
+@media only screen and (max-width: 1280px){
+flex: 0 0 80px;
+min-width: 80px;
+padding-left: 0;
+padding-right: 0;
+>.twitter-logo{
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    padding: 15px;
+    box-sizing: border-box;
+}
+>Button{
+    display: none;
+}
+}
+@media only screen and (max-width: 1004px){
+width: 80px;
+}
+@media only screen and (max-width: 500px){
+flex: 0 0 68px;
+width: 68px;
+min-width: 68px;
+padding: 0;
+}
+
+}
+
+
 `
 export const ProfileBox = styled.div`
     position: relative;
@@ -40,6 +69,19 @@ export const ProfileBox = styled.div`
     margin-top: auto;
     width: 100%;
     min-width: 0;
+
+    @media only screen and (max-width: 1280px) {
+        width: 60px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media only screen and (max-width: 500px) {
+        display: flex;
+        width: 56px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 `
 export const ProfileMenuButton = styled.button`
     display: flex;
@@ -54,6 +96,30 @@ export const ProfileMenuButton = styled.button`
     background: transparent;
     text-align: left;
     cursor: pointer;
+
+    @media only screen and (max-width: 1280px) {
+        width: 60px;
+        height: 60px;
+        padding: 5px;
+        box-sizing: border-box;
+        justify-content: center;
+
+        >div {
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width: 500px) {
+        width: 56px;
+        height: 56px;
+        padding: 6px;
+        justify-content: center;
+        box-sizing: border-box;
+
+        >div {
+            display: none;
+        }
+    }
 
 
     &:hover {
@@ -88,6 +154,20 @@ export const ProfileAvatar = styled.img`
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
+
+    @media only screen and (max-width: 1280px) {
+        width: 45px;
+        height: 45px;
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+
+    @media only screen and (max-width: 500px) {
+        width: 44px;
+        height: 44px;
+        margin-left: 10px;
+        margin-bottom: 20px;
+    }
 `
 export const ProfileMenu = styled.div`
     position: absolute;
@@ -139,5 +219,24 @@ export const SidebarIcon = styled.div`
     transform: color 100ms ease-in-out;
     border-radius: 40px;
     
+}
+
+@media only screen and (max-width: 1280px){
+border-radius: 50%;
+width: 60px;
+height: 60px;
+box-sizing: border-box;
+justify-content: center;
+padding: 15px;
+margin-left: auto;
+margin-right: auto;
+>h2{
+display: none;
+}
+}
+@media only screen and (max-width: 500px){
+width: 56px;
+height: 56px;
+padding: 13px;
 }
 `
