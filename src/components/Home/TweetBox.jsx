@@ -1,11 +1,10 @@
 import avatar from '../../assets/avatar.jpeg'
-import { TweetBoxContainer, Div, Avatar, Form, DivBox, File } from './styled'
+import { TweetBoxContainer, Div, Avatar, Form, DivBox, File, PostButton } from './styled'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import GifBoxOutlinedIcon from '@mui/icons-material/GifBoxOutlined'
 import PollOutlinedIcon from '@mui/icons-material/PollOutlined'
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
-import { Button } from '@mui/material'
 import { useState } from 'react'
 import { useMedia } from '../../contexts/useMedia'
 import { auth } from '../../Config'
@@ -13,6 +12,7 @@ import { auth } from '../../Config'
 export const TweetBox = () => {
   const { selectedMedia, saveMedia, publishPost } = useMedia()
   const [text, setText] = useState('')
+  const postReady = Boolean(text.trim() || selectedMedia);
 
   const handleMediaChange = (event) => {
     const file = event.currentTarget.files?.[0]
@@ -53,12 +53,19 @@ export const TweetBox = () => {
       <Form onSubmit={handleSubmit}>
         <Div>
           <Avatar src={avatar} alt="User Avatar" />
-          <input
-            type="text"
-            placeholder="What's happening?"
+          <textarea
+            rows={1}
+            maxLength={280}
             value={text}
-            onChange={(event) => setText(event.target.value)}
+            placeholder="What's happening?"
+            onChange={(event) => {
+              const value = event.target.value;
+              setText(value);
+              event.target.style.height = "auto";
+              event.target.style.height = `${event.target.scrollHeight}px`;
+            }}
           />
+          <span>{text.length}/280</span>
 
         </Div>
         <Div className="tweet-actions">
@@ -82,13 +89,14 @@ export const TweetBox = () => {
             <SentimentSatisfiedAltOutlinedIcon />
             <CalendarMonthOutlinedIcon />
           </DivBox>
-          <Button
+          <PostButton
+            $ready={postReady}
             variant="contained"
             type="submit"
-            disabled={!text.trim() && !selectedMedia}
+            disabled={!postReady}
           >
             Post
-          </Button>
+          </PostButton>
         </Div>
       </Form>
     </TweetBoxContainer>

@@ -91,7 +91,7 @@ function AuthenticatedApp() {
   return (
     <div className="App">
       <Sidebar user={user} onNavigate={setCurrentView} />
-      <Home currentView={currentView} onNavigate={setCurrentView} />
+      <Home user={user} currentView={currentView} onNavigate={setCurrentView} />
       <Widgets />
       <GlobalStyles />
     </div>
