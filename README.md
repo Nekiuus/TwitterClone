@@ -32,10 +32,11 @@ A clone of the social network X (formerly Twitter), built as a Single Page Appli
 
 ### Milestone 2 – User features and tweets (planned)
 
-- [ ] User registration with unique username and email
+- [X] User registration with unique username and email
 - [X] Log in with username/password and Google
 - [X] Publish tweets (max. 280 characters)
-- [ ] Follow users by username
+- [X] Follow users by username
+- [x] Explore page: search users
 
 ### Milestone 3 – Following and lists (planned)
 
