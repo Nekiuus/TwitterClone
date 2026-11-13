@@ -1,4 +1,5 @@
 import styled, {css} from 'styled-components';
+import { Button as MuiButton } from '@mui/material';
 
 
 export const Container = styled.div`
@@ -85,26 +86,20 @@ export const Div = styled.div`
   gap: 12px;
   width: 100%;
 
-  > input {
-    width: 100%;
-    border: none;
-    outline: 0;
-    background: var(--bg);
-    color: var(--twitterColor);
-    font-size: 20px;
-    line-height: 25px;
-    padding: 8px 0;
-  }
-
-  > Button {
-    background: var(--twitterColorHover) !important;
-    border: none !important;
-    color: black !important;
-    font-weight: 700 !important;
-    min-width: 68px !important;
-    border-radius: 20px !important;
-    text-transform: capitalize !important;
-  }
+  > textarea {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  resize: none;
+  overflow: hidden;
+  color: var(--twitterColor);
+  background: var(--bg);
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
   &.tweet-actions {
     align-items: center;
@@ -214,6 +209,9 @@ export const PostDescription = styled.div`
     color: var(--twitterColor);
     font-size: 15px;
     line-height: 16.6875px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: pre-wrap;
   }
 `
 
@@ -286,3 +284,26 @@ export const Video = styled.video`
 
   
 `
+export const PostButton = styled(MuiButton)`
+  && {
+    min-width: 68px;
+    border: 0;
+    border-radius: 20px;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: #000;
+    background-color: ${({ $ready }) =>
+      $ready ? '#eff3f4' : '#71767b'};
+  }
+
+  &&:hover {
+    background-color: ${({ $ready }) =>
+      $ready ? '#d7dbdc' : '#71767b'};
+  }
+
+  &&.Mui-disabled {
+    color: #000;
+    background-color: #71767b;
+    opacity: 1;
+  }
+`;

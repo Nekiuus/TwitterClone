@@ -25,9 +25,9 @@ export const Sidebar = ({ user, onNavigate }) => {
       <Container>
         <XIcon className="twitter-logo"/>
 
-     <IconOption Icon={GitHubIcon} text="Home"/>
-     <IconOption Icon={SearchIcon} text="Explore"/>
-      <IconOption Icon={NotificationsNoneIcon} text="Notifications"/>
+     <IconOption Icon={GitHubIcon} onClick={() => onNavigate('home')} text="Home"/>
+     <IconOption Icon={SearchIcon} onClick={() => onNavigate('explore')} text="Explore"/>
+      <IconOption Icon={NotificationsNoneIcon} onClick={() => onNavigate('notifications')} text="Notifications"/>
        <IconOption Icon={ForwardToInboxIcon} text="Messages"/>
        <IconOption Icon={BookmarkBorderIcon} text="Bookmarks"/>
        <IconOption primary Icon={ListIcon} text="List"/>

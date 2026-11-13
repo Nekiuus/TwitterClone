@@ -2,14 +2,14 @@ import { initializeApp } from "firebase/app";
 import {
   browserLocalPersistence,
   getAuth,
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getFirestore, doc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB8PrcQ5-XRUiir7xWl6L8gnRg1_NcxlE4",
@@ -28,16 +28,31 @@ const googleProvider = new GoogleAuthProvider();
 const authPersistence = setPersistence(auth, browserLocalPersistence);
 const handleLogout = () => signOut(auth);
 
-// Firebase Storage
-export const db = getFirestore(app);
-const storage = getStorage(app);
-export { storage, app as default };
+
+//HANLDE SING UP EMAIL AND PASSWORD
+const handleSignUp = async (e, setError) => {
+  e.preventDefault();
+  const email = e.target.email.value;
+  const password = e.target.password.value;
+
+  try {
+    await authPersistence;
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    await saveUserProfile(userCred.user);
+    console.log('User signed up:', userCred.user);
+    setError('');
+  } catch (err) {
+    console.log(err);
+    setError('Sign up failed');
+  }
+}
 
 // HANDLE GOOGLE LOGIN
 const handleGoogleLogin = async (setError) => {
   try {
     await authPersistence;
     const result = await signInWithPopup(auth, googleProvider);
+    await saveUserProfile(result.user);
     setError('');
     console.log('Google Sign-In', result.user);
   } catch (err) {
@@ -56,6 +71,7 @@ const handleSubmit = async (e, setError) => {
   try {
       await authPersistence;
       const userCred = await signInWithEmailAndPassword(auth, email, password);
+      await saveUserProfile(userCred.user);
       console.log('User signed in:', userCred.user);
       setError('')
   } catch (err) {
@@ -65,5 +81,72 @@ const handleSubmit = async (e, setError) => {
   }
   e.target.reset();
 }
+//Follow and Unfollow function
+export const db = getFirestore(app)
 
-export { auth, googleProvider, handleGoogleLogin, handleSubmit, handleLogout }
+export async function saveUserProfile(user) {
+const username = user.email?.split("@")[0] || user.uid;
+
+await setDoc(doc(db, "users", user.uid), {
+  uid: user.uid,
+  email: user.email || "",
+  username: username,
+  usernameKey: username.toLowerCase(),
+  displayName: user.displayName || username,
+  photoURL: user.photoURL || "",
+  updatedAt: serverTimestamp(),
+},
+ { merge: true });
+}
+
+function relationshipProfile(profile, uid) {
+  const email = profile.email || "";
+  const username = profile.username || email.split("@")[0] || uid;
+  const displayName = profile.displayName && profile.displayName !== email
+    ? profile.displayName
+    : username;
+
+  return {
+    uid,
+    username,
+    email,
+    displayName,
+    photoURL: profile.photoURL || "",
+  };
+}
+
+export async function toggleFollow(currentUid, targetUid) {
+  if (!currentUid || !targetUid || currentUid === targetUid) {
+    throw new Error('No se puede seguir esta cuenta')
+  }
+
+  const followingRef = doc(db, 'users', currentUid, 'following', targetUid)
+  const followerRef = doc(db, 'users', targetUid, 'followers', currentUid)
+  const currentProfileRef = doc(db, 'users', currentUid)
+  const targetProfileRef = doc(db, 'users', targetUid)
+
+  await runTransaction(db, async (transaction) => {
+    const following = await transaction.get(followingRef)
+
+    if (following.exists()) {
+      transaction.delete(followingRef)
+      transaction.delete(followerRef)
+    } else {
+      const [currentProfile, targetProfile] = await Promise.all([
+        transaction.get(currentProfileRef),
+        transaction.get(targetProfileRef),
+      ])
+
+      transaction.set(followingRef, {
+        ...relationshipProfile(targetProfile.data() || {}, targetUid),
+        createdAt: serverTimestamp(),
+      })
+      transaction.set(followerRef, {
+        ...relationshipProfile(currentProfile.data() || {}, currentUid),
+        createdAt: serverTimestamp(),
+      })
+    }
+  })
+}
+
+export { auth, googleProvider, handleGoogleLogin, handleSubmit, handleLogout, handleSignUp }

@@ -170,4 +170,15 @@ export const Container = styled.div`
     font-weight: 700;
     border-bottom: 3px solid #1d9bf0;
   }
+    @media (max-width: 1280px) {
+  flex: 0.55;
+}
+
+@media (max-width: 1004px) {
+  flex: 0.95;
+}
+
+@media (max-width: 500px) {
+  flex: 1;
+}
 `
