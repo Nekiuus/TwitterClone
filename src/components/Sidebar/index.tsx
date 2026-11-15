@@ -15,9 +15,10 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import HistoryIcon from '@mui/icons-material/History';
 import { Button } from '@mui/material';
 import avatar from '../../assets/avatar.jpeg';
+import type { User } from 'firebase/auth';
 
 
-export const Sidebar = ({ user, onNavigate }) => {
+export const Sidebar = ({ user, onNavigate }: { user: User | null; onNavigate: (view: string) => void }) => {
   const [showPostModal, setShowPostModal] = useState(false);
 
   return (
@@ -55,7 +56,7 @@ export const Sidebar = ({ user, onNavigate }) => {
             </div>
             <div className="flex gap-3">
               <img src={user?.photoURL || avatar} alt="User avatar" className="h-10 w-10 rounded-full object-cover" />
-              <textarea autoFocus rows="4" placeholder="What's happening?" className="w-full resize-none bg-transparent text-xl text-white outline-none placeholder:text-[#71767b]" />
+              <textarea autoFocus rows={4} placeholder="What's happening?" className="w-full resize-none bg-transparent text-xl text-white outline-none placeholder:text-[#71767b]" />
             </div>
             <div className="mt-5 flex items-center justify-between border-t border-[#2f3336] pt-4">
               <span className="text-sm text-[#1d9bf0]">Everyone can reply</span>

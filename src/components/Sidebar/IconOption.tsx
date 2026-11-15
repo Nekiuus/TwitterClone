@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { ProfileAvatar, ProfileBox, ProfileMenu, ProfileMenuButton, SidebarIcon } from './styled';
 import avatar from '../../assets/avatar.jpeg';
 import { handleLogout } from '../../Config';
+import type SvgIcon from '@mui/material/SvgIcon';
+import type { User } from 'firebase/auth';
 
-export const IconOption = ({ Icon, text, onClick }) => {
+export const IconOption = ({ Icon, text, onClick }: { Icon: typeof SvgIcon; text: string; onClick?: () => void; primary?: boolean }) => {
   return (
     <SidebarIcon onClick={onClick}>
         <Icon />
@@ -15,7 +17,7 @@ export const IconOption = ({ Icon, text, onClick }) => {
     
 }
 
-export const AccountBox = ({ user }) => {
+export const AccountBox = ({ user }: { user: User | null }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(user?.photoURL || avatar);
 

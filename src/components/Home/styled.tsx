@@ -136,7 +136,7 @@ export const DivBox = styled.div`
   }
 `
 
-export const File = styled.input`
+export const File = styled.input<{ primary?: boolean }>`
   max-width: 35px;
   position: absolute;
   z-index: 10;
@@ -256,7 +256,7 @@ export const PostFooter = styled.div`
   }
 `
 
-export const PostActionIcon = styled.span`
+export const PostActionIcon = styled.span<{ $icon: string }>`
   display: block;
   width: 23px;
   height: 23px;
@@ -284,7 +284,7 @@ export const Video = styled.video`
 
   
 `
-export const PostButton = styled(MuiButton)`
+export const PostButton = styled(MuiButton)<{ $ready: boolean }>`
   && {
     min-width: 68px;
     border: 0;
@@ -306,4 +306,39 @@ export const PostButton = styled(MuiButton)`
     background-color: #71767b;
     opacity: 1;
   }
-`;
+`
+
+//Preview of selected media
+export const PreviewContainer = styled.div`
+  position: relative;
+  width: calc(100% - 52px);
+  margin: 12px 0 12px 52px;
+`
+
+export const PreviewImage = styled.img`
+  display: block;
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 16px;
+  object-fit: cover;
+`
+
+export const PreviewVideo = styled.video`
+  display: block;
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 16px;
+  background: #000;
+`
+
+export const RemoveMediaButton = styled.button`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  border-radius: 50%;
+  padding: 6px 10px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+`

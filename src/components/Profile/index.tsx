@@ -1,12 +1,13 @@
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SearchIcon from '@mui/icons-material/Search'
-import avatar from '../../assets/avatar.jpeg'
 import { Post } from '../Home/Post'
 import { Container } from './styled'
 import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '../../Config'
 import { useEffect, useState } from 'react'
+import type { User } from 'firebase/auth'
+import avatar from '../../assets/avatar.jpeg'
 
 
 
@@ -22,7 +23,22 @@ const profilePosts = [
   { id: 212, time: '3w', text: 'Ending the week grateful for the little wins.', image: 'https://res.cloudinary.com/tahstxat/image/upload/v1793154219/samples/ecommerce/car-interior-design.jpg', replies: 7, reposts: 3, likes: 47, views: '880' },
 ]
 
-const UserList = ({ title, users, username, onBack }) => (
+interface ProfileListUser {
+  uid: string
+  username?: string
+  email?: string
+  displayName?: string
+  photoURL?: string
+}
+
+type ListView = 'Followers' | 'Following'
+
+const UserList = ({ title, users, username, onBack }: {
+  title: ListView
+  users: ProfileListUser[]
+  username: string
+  onBack: () => void
+}) => (
   <Container>
     <header className="profile-header list-header">
       <button type="button" onClick={onBack} aria-label="Back to profile"><ArrowBackIcon /></button>
@@ -50,15 +66,15 @@ const UserList = ({ title, users, username, onBack }) => (
   </Container>
 )
 
-export const Profile = ({ user, onNavigate }) => {
-  const [listView, setListView] = useState(null)
-  const [users, setUsers] = useState([])
+export const Profile = ({ user, onNavigate }: { user: User | null; onNavigate: (view: string) => void }) => {
+  const [listView, setListView] = useState<ListView | null>(null)
+  const [users, setUsers] = useState<ProfileListUser[]>([])
   const [counts, setCounts] = useState({ following: 0, followers: 0 })
 
 useEffect(() => {
   if (!user?.uid) return
 
-  const unsubscribers = ['following', 'followers'].map((listName) =>
+  const unsubscribers = (['following', 'followers'] as const).map((listName) =>
     onSnapshot(
       collection(db, 'users', user.uid, listName),
       (snapshot) =>
@@ -87,7 +103,7 @@ useEffect(() => {
           ...item.data(),
           ...(profileSnapshot.data() || {}),
           uid: item.id,
-        }
+        } as ProfileListUser
       }))
 
       if (isActive) setUsers(profiles)

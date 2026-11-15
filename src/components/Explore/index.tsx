@@ -5,10 +5,19 @@ import {db, toggleFollow} from '../../Config';
 import { Container } from './styled';
 import { collection, onSnapshot, endAt, limit, orderBy, query, startAt } from 'firebase/firestore';
 import avatar from '../../assets/avatar.jpeg';
+import type { User } from 'firebase/auth';
+
+interface SearchResult {
+    uid: string;
+    username?: string;
+    email?: string;
+    displayName?: string;
+    photoURL?: string;
+}
 
 const news = [
     {
-        title: "Nvidea and the future of AI",
+        title: "Nvidea CEO cheated on his wife with two baddies",
         detail: "Tecnology · Today",
         image: "https://static.toiimg.com/thumb/msid-135698868,imgsize-74958,width-400,height-225,resizemode-4/135698868.jpg"
     },
@@ -25,12 +34,12 @@ const news = [
 ]
 
 
-export const Explore = ({user}) => {
+export const Explore = ({ user }: { user: User | null }) => {
     const [terms, setTerms] = useState('');
-    const [results, setResults] = useState([]);
-    const [following, setFollowing] = useState(new Set());
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [following, setFollowing] = useState<Set<string>>(new Set());
     const [loading, setLoading] = useState(false);
-    const [busyUid, setBusyUid] = useState(null);
+    const [busyUid, setBusyUid] = useState<string | null>(null);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -66,7 +75,7 @@ useEffect(() => {
             setResults(
                 snapshot.docs
                     .filter((item) => item.id !== user.uid)
-                    .map((item) => ({ uid: item.id, ...item.data() }))
+                    .map((item) => ({ ...item.data(), uid: item.id }) as SearchResult)
             );
             setLoading(false);
         },
@@ -78,7 +87,8 @@ useEffect(() => {
     );
 }, [terms, user?.uid]);
 
-async function handleFollow(targetUid) {
+async function handleFollow(targetUid: string) {
+    if (!user?.uid) return;
     setBusyUid(targetUid);
     setError('');
 

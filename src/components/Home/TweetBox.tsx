@@ -1,32 +1,32 @@
 import avatar from '../../assets/avatar.jpeg'
-import { TweetBoxContainer, Div, Avatar, Form, DivBox, File, PostButton } from './styled'
+import { TweetBoxContainer, Div, Avatar, Form, DivBox, File, PostButton, PreviewContainer, PreviewImage, PreviewVideo, RemoveMediaButton } from './styled'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import GifBoxOutlinedIcon from '@mui/icons-material/GifBoxOutlined'
 import PollOutlinedIcon from '@mui/icons-material/PollOutlined'
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
-import { useState } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { useMedia } from '../../contexts/useMedia'
 import { auth } from '../../Config'
 
 export const TweetBox = () => {
-  const { selectedMedia, saveMedia, publishPost } = useMedia()
+  const { selectedMedia, saveMedia, clearMedia, publishPost } = useMedia()
   const [text, setText] = useState('')
   const postReady = Boolean(text.trim() || selectedMedia);
 
-  const handleMediaChange = (event) => {
+  const handleMediaChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files?.[0]
     event.currentTarget.value = ''
 
     if (!file) return
 
     if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-      console.error('Selecciona una imagen o un video.')
+      console.error('Select an image or video file.')
       return
     }
 
     const media = saveMedia(file)
-    console.log('Medio guardado localmente en el contexto de React:', {
+    console.log('Media saved locally in the React context:', {
       name: media.name,
       type: media.type,
       size: media.size,
@@ -34,7 +34,7 @@ export const TweetBox = () => {
     })
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const user = auth.currentUser
@@ -68,11 +68,37 @@ export const TweetBox = () => {
           <span>{text.length}/280</span>
 
         </Div>
+        {/*Preview of selected media*/}
+        {selectedMedia && (
+        <PreviewContainer>
+          {selectedMedia.type.startsWith('image/') ? (
+            <PreviewImage
+              src={selectedMedia.url}
+              alt="Preview of the image"
+            />
+          ) : (
+            <PreviewVideo
+              src={selectedMedia.url}
+              controls
+              aria-label="Preview of the video"
+            />
+          )}
+
+          <RemoveMediaButton
+            type="button"
+            onClick={clearMedia}
+            aria-label="Remove file"
+          >
+            ×
+          </RemoveMediaButton>
+        </PreviewContainer>
+      )}
+
         <Div className="tweet-actions">
           <DivBox>
             <label
               htmlFor="tweet-media"
-              aria-label="Seleccionar imagen o video"
+              aria-label="Select image or video"
               style={{ position: 'relative', display: 'inline-flex', cursor: 'pointer' }}
             >
               <ImageOutlinedIcon />
