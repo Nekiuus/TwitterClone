@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { MediaContext } from './mediaContext'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { MediaContext, type MediaPost, type SelectedMedia } from './mediaContext'
 
-export function MediaProvider({ children }) {
-  const [selectedMedia, setSelectedMedia] = useState(null)
-  const [posts, setPosts] = useState([])
-  const objectUrlRef = useRef(null)
-  const publishedUrlsRef = useRef(new Set())
+export function MediaProvider({ children }: { children: ReactNode }) {
+  const [selectedMedia, setSelectedMedia] = useState<SelectedMedia | null>(null)
+  const [posts, setPosts] = useState<MediaPost[]>([])
+  const objectUrlRef = useRef<string | null>(null)
+  const publishedUrlsRef = useRef<Set<string>>(new Set())
 
-  const saveMedia = useCallback((file) => {
+  const saveMedia = useCallback((file: File) => {
     if (objectUrlRef.current && !publishedUrlsRef.current.has(objectUrlRef.current)) {
       URL.revokeObjectURL(objectUrlRef.current)
     }
@@ -25,12 +25,12 @@ export function MediaProvider({ children }) {
     return media
   }, [])
 
-  const publishPost = useCallback((post) => {
+  const publishPost = useCallback((post: Omit<MediaPost, 'id' | 'time' | 'replies' | 'reposts' | 'likes' | 'views' | 'type' | 'image' | 'video'>) => {
     const newPost = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       ...post,
       ...(selectedMedia && {
-        type: selectedMedia.type.startsWith('video/') ? 'video' : 'image',
+        type: selectedMedia.type.startsWith('video/') ? 'video' as const : 'image' as const,
         image: selectedMedia.type.startsWith('image/') ? selectedMedia.url : undefined,
         video: selectedMedia.type.startsWith('video/') ? selectedMedia.url : undefined,
       }),

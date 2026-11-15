@@ -8,8 +8,10 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  type User,
 } from "firebase/auth";
 import { getFirestore, doc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
+import type { Dispatch, FormEvent, SetStateAction } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB8PrcQ5-XRUiir7xWl6L8gnRg1_NcxlE4",
@@ -28,12 +30,14 @@ const googleProvider = new GoogleAuthProvider();
 const authPersistence = setPersistence(auth, browserLocalPersistence);
 const handleLogout = () => signOut(auth);
 
+type SetError = Dispatch<SetStateAction<string>>;
 
 //HANLDE SING UP EMAIL AND PASSWORD
-const handleSignUp = async (e, setError) => {
-  e.preventDefault();
-  const email = e.target.email.value;
-  const password = e.target.password.value;
+const handleSignUp = async (event: FormEvent<HTMLFormElement>, setError: SetError) => {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
+  const email = String(formData.get("email") ?? "");
+  const password = String(formData.get("password") ?? "");
 
   try {
     await authPersistence;
@@ -48,7 +52,7 @@ const handleSignUp = async (e, setError) => {
 }
 
 // HANDLE GOOGLE LOGIN
-const handleGoogleLogin = async (setError) => {
+const handleGoogleLogin = async (setError: SetError) => {
   try {
     await authPersistence;
     const result = await signInWithPopup(auth, googleProvider);
@@ -63,10 +67,11 @@ const handleGoogleLogin = async (setError) => {
 
 
 //HANDLE LOGIN EMAIL AND PASSWORD
-const handleSubmit = async (e, setError) => {
-  e.preventDefault();
-  const email = e.target.email.value;
-  const password = e.target.password.value;
+const handleSubmit = async (event: FormEvent<HTMLFormElement>, setError: SetError) => {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
+  const email = String(formData.get("email") ?? "");
+  const password = String(formData.get("password") ?? "");
 
   try {
       await authPersistence;
@@ -79,12 +84,21 @@ const handleSubmit = async (e, setError) => {
     setError('Invalid email or password');
     
   }
-  e.target.reset();
+  event.currentTarget.reset();
 }
 //Follow and Unfollow function
 export const db = getFirestore(app)
 
-export async function saveUserProfile(user) {
+interface UserProfile {
+  uid: string;
+  email: string;
+  username: string;
+  usernameKey: string;
+  displayName: string;
+  photoURL: string;
+}
+
+export async function saveUserProfile(user: User) {
 const username = user.email?.split("@")[0] || user.uid;
 
 await setDoc(doc(db, "users", user.uid), {
@@ -99,7 +113,7 @@ await setDoc(doc(db, "users", user.uid), {
  { merge: true });
 }
 
-function relationshipProfile(profile, uid) {
+function relationshipProfile(profile: Partial<UserProfile>, uid: string) {
   const email = profile.email || "";
   const username = profile.username || email.split("@")[0] || uid;
   const displayName = profile.displayName && profile.displayName !== email
@@ -115,7 +129,7 @@ function relationshipProfile(profile, uid) {
   };
 }
 
-export async function toggleFollow(currentUid, targetUid) {
+export async function toggleFollow(currentUid: string, targetUid: string) {
   if (!currentUid || !targetUid || currentUid === targetUid) {
     throw new Error('No se puede seguir esta cuenta')
   }

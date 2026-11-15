@@ -5,8 +5,10 @@ import { Post } from './Post'
 import { Profile } from '../Profile'
 import { Explore } from '../Explore'
 import { useMedia } from '../../contexts/useMedia'
+import type { User } from 'firebase/auth'
+import type { PostProps } from './Post'
 
-const posts = [
+const posts: PostProps[] = [
 
   { id: 1, name: 'Mega atun', type: 'video', username: '@Abellcymeg', time: '10h', avatar: 'https://pbs.twimg.com/profile_images/2116583824650035200/85bm-i1u_400x400.jpg', text: 'When I am sad I watch this video.', video: 'https://res.cloudinary.com/tahstxat/video/upload/v1794612740/FoQkUPQjQtd9lXix.mp4', replies: 13, reposts: 20, likes: 156, views: '4.6K' },
   
@@ -55,7 +57,7 @@ const posts = [
   { id: 5, name: 'Kitties Videos', type: 'video', username: '@KittiesVids', time: '5h', avatar: 'https://pbs.twimg.com/profile_images/1900925831767261184/0IWMn5TF_400x400.jpg', text: '', video: 'https://res.cloudinary.com/tahstxat/video/upload/v1793402393/n3c5sfag_oDmsny8.mp4', replies: 8, reposts: 12, likes: 64, views: '1.8K' },
 ]
 
-const followingPosts = [
+const followingPosts: PostProps[] = [
     { id: 109, name: 'Emma', username: '@emma_nature', time: '10h', avatar: 'https://randomuser.me/api/portraits/women/49.jpg', text: 'Old Classic', image: 'https://pbs.twimg.com/media/HW37yLcbEAAcTEh?format=jpg&name=medium', replies: 13, reposts: 20, likes: 156, views: '4.6K' },
   { id: 101, name: 'KaelWorks', username: '@SGarzonart', time: 'Jan 01', avatar: 'https://pbs.twimg.com/profile_images/2008207775969542145/AnBNNvdG_400x400.jpg', text: 'A bit late, but.... happy 2026!! 🎇📷Wishing you progress, peace, and big wins this year.🥂', image: 'https://pbs.twimg.com/media/G96l1yXWcAAdFH2?format=jpg&name=medium', replies: 8, reposts: 12, likes: 64, views: '1.8K' },
   { id: 102, name: 'Sua', type: 'video', username: '@suaverotic', time: '3h', avatar: 'https://pbs.twimg.com/profile_images/2096249887398432769/16KWo33l_400x400.jpg', text: 'me after crying for 3hrs', video: 'https://res.cloudinary.com/tahstxat/video/upload/v1793402903/JGZx12ThxSlaMu4d.mp4', replies: 14, reposts: 9, likes: 87, views: '2.4K' },
@@ -68,7 +70,11 @@ const followingPosts = [
   { id: 110, name: 'Oliver', username: '@oliverwrites', time: '12h', avatar: 'https://randomuser.me/api/portraits/men/15.jpg', text: '', image: 'https://pbs.twimg.com/media/HW7sdCUWwAARiKY?format=jpg&name=medium', replies: 4, reposts: 6, likes: 47, views: '1.3K' },
 ]
 
-export const Home = ({ user, currentView, onNavigate }) => {
+export const Home = ({ user, currentView, onNavigate }: {
+  user: User | null
+  currentView: string
+  onNavigate: (view: string) => void
+}) => {
   const [activeTab, setActiveTab] = useState('for-you')
   const { posts: localPosts } = useMedia()
 

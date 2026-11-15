@@ -1,7 +1,7 @@
 import { useContext } from 'react'
-import { MediaContext } from './mediaContext'
+import { MediaContext, type MediaContextValue } from './mediaContext'
 
-export function useMedia() {
+export function useMedia(): MediaContextValue {
   const mediaContext = useContext(MediaContext)
 
   if (!mediaContext) {

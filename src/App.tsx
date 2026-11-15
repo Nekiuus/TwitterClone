@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged, type User } from 'firebase/auth'
 import GlobalStyles from './assets/styles/GlobalStyles'
 import { Sidebar } from './components/Sidebar'
 import { Home } from './components/Home'
@@ -9,10 +9,16 @@ import { auth } from './Config'
 import { Login } from './Login'
 import { MediaProvider } from './contexts/MediaProvider'
 
-const AuthContext = createContext(null)
+interface AuthContextValue {
+  user: User | null
+  isLoading: boolean
+  error: Error | null
+}
 
-function AuthProvider({ children }) {
-  const [authState, setAuthState] = useState({
+const AuthContext = createContext<AuthContextValue | null>(null)
+
+function AuthProvider({ children }: { children: ReactNode }) {
+  const [authState, setAuthState] = useState<AuthContextValue>({
     user: null,
     isLoading: true,
     error: null,
@@ -63,7 +69,7 @@ function GuestRoute() {
   return <Login />
 }
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, isLoading, error } = useAuth()
 
   if (isLoading) return <AuthLoading />

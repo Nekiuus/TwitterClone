@@ -6,7 +6,36 @@ import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'
 import reply from '../../assets/reply.png'
 import retweet from '../../assets/retweet.png'
 
-export const Post = ({ name, username, time, text, image, video, type, replies, reposts, likes, views, avatar }) => {
+export interface PostProps {
+  id?: string | number
+  name?: string
+  username?: string
+  time?: string
+  text?: string
+  image?: string
+  video?: string
+  type?: 'image' | 'video'
+  replies?: number
+  reposts?: number
+  likes?: number
+  views?: string
+  avatar?: string
+}
+
+export const Post = ({
+  name = 'User',
+  username = '@user',
+  time = '',
+  text = '',
+  image,
+  video,
+  type,
+  replies = 0,
+  reposts = 0,
+  likes = 0,
+  views = '0',
+  avatar = '',
+}: PostProps) => {
   return (
     <PostContainer>
       <Avatar src={avatar} alt={`${name} avatar`} />
