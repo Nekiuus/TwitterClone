@@ -7,6 +7,7 @@ A clone of the social network X (formerly Twitter), built as a Single Page Appli
 ## Tech Stack
 
 - [React](https://react.dev/) – UI library
+- [TypeScript](https://www.typescriptlang.org/) – static typing
 - [Vite](https://vitejs.dev/) – build tool and dev server
 - [styled-components](https://styled-components.com/) – component styling <!-- TODO: confirm -->
 - [Firebase](https://firebase.google.com/) – authentication and database (Milestones 2 and 3)
@@ -72,6 +73,7 @@ cp .env.example .env
 yarn dev        # start the development server
 yarn build      # create a production build
 yarn lint       # run ESLint
+yarn typecheck  # check TypeScript types
 ```
 
 ## Project Structure
@@ -83,8 +85,8 @@ src/
 │   ├── Home/        # Feed, TweetBox and Post components
 │   ├── Sidebar/     # Navigation sidebar and IconOption
 │   └── Widgets/     # Right-hand widgets column
-├── App.jsx
-└── main.jsx
+├── App.tsx
+└── main.tsx
 ```
 
 ## Git Workflow
