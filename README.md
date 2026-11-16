@@ -43,6 +43,10 @@ A purple-themed social network inspired by X, built as a React + TypeScript SPA 
 
 - [ ] Paginated followers and following lists
 - [ ] Follow button on user pages
+- [x] Starling branding (logo and purple theme)
+- [x] Like, repost and reply on posts
+- [x] "For you" and "Following" feeds
+- [x] Notifications and History pages
 
 ## Getting Started
 
