@@ -4,7 +4,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import {db, toggleFollow} from '../../Config';
 import { Container } from './styled';
 import { collection, onSnapshot, endAt, limit, orderBy, query, startAt } from 'firebase/firestore';
-import avatar from '../../assets/avatar.jpeg';
+import avatar from '../../assets/avatar.png';
 import type { User } from 'firebase/auth';
 
 interface SearchResult {

@@ -6,18 +6,23 @@ createGlobalStyle`
 
 
 :root {
-  --twitterColor: #eff3f4;
-  --twitterColorHover: #77797a;
-  --Hover: #232424;
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #000000;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --twitterColor: #f3eaff;
+  --twitterColorHover: #c084fc;
+  --Hover: rgba(168, 85, 247, 0.14);
+  --text: #b8a8ca;
+  --text-h: #fff7ff;
+  --bg: #0b0611;
+  --border: rgba(205, 174, 235, 0.18);
+  --code-bg: #211331;
+  --accent: #c084fc;
+  --accent-bg: rgba(192, 132, 252, 0.15);
+  --accent-border: rgba(192, 132, 252, 0.5);
+  --surface-border: rgba(192, 132, 252, 0.3);
+  --muted-purple: #bda0d3;
+  --social-bg: rgba(47, 28, 67, 0.5);
+  --app-background:
+    radial-gradient(ellipse at 72% 20%, #321455 0%, #1c0c31 38%, transparent 72%),
+    linear-gradient(135deg, #0b0713 0%, #180a2c 55%, #08040f 100%);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -29,7 +34,7 @@ createGlobalStyle`
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
-  background: var(--bg);
+  background: var(--app-background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -62,23 +67,18 @@ createGlobalStyle`
 
 body {
   margin: 0;
+  background: var(--app-background);
 }
 
 #root {
-  width: 1280px;
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   text-align: center;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-}
-
-@media (min-width: 800px) and (max-width: 1004px) {
-  #root {
-    width: calc(100% - 120px);
-  }
 }
 
 h1,
@@ -127,13 +127,15 @@ code {
 
 .App{
   display: flex;
-  width: 100%;
+  width: 1280px;
+  max-width: 100%;
+  margin: 0 auto;
   flex: 1;
   height: 100vh;
   min-height: 0;
   overflow: hidden;
   box-sizing: border-box;
-  border: 1px solid red;
+  background: transparent;
 }
 
 `

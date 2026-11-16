@@ -1,15 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import {
-  Widget,
-  Header,
-  DivIcon,
-  DivContent,
-  Card,
-  PremiumButton,
-  Trend,
-  ShowMore,
-} from './styled'
+import { Widget, Header, DivIcon, DivContent, Card, PremiumButton, Trend, ShowMore } from './styled'
 
 const trends = [
   'Cúcuta',

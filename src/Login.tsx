@@ -1,8 +1,9 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
-import XIcon from '@mui/icons-material/X'
 import { handleGoogleLogin, handleSubmit, handleSignUp } from './Config'
+import starlingLogo from './assets/starling-logo.png'
+import { LoginActions, LoginBrand, LoginButton, LoginDivider, LoginError, LoginForm, LoginFormPanel, LoginGlow, LoginInput, LoginLayout, LoginLogo, LoginPage, LoginSocialButton, LoginTerms, LoginTitle, PasswordField, PasswordToggle, SignupButton, SignupCloseButton, SignupDialog, SignupForm, SignupLogo, SignupOverlay, SignupTitle, VisuallyHiddenLabel } from './components/Login/styled'
 
 export const Login = () => {
   const [formVisible, setFormVisible] = useState(false)
@@ -21,39 +22,49 @@ export const Login = () => {
 
   return (
     <>
-      <style>{`@keyframes login-shine{0%{transform:translate(-45%,-35%) rotate(0)}50%{transform:translate(35%,25%) rotate(180deg)}100%{transform:translate(-45%,-35%) rotate(360deg)}}.login-x-glow{position:absolute;width:62%;aspect-ratio:1;border-radius:50%;background:conic-gradient(transparent 0deg,rgba(255,255,255,.02) 90deg,rgba(255,255,255,.34) 150deg,transparent 220deg);filter:blur(28px);animation:login-shine 6s linear infinite}.login-x-icon{z-index:1!important;width:min(75vw,700px)!important;height:min(75vw,700px)!important;color:#090a0b;filter:drop-shadow(0 0 2px #596068) drop-shadow(0 0 10px rgba(255,255,255,.16))}@media(max-width:800px){.login-brand{display:none}}`}</style>
-      <div className="min-h-screen flex items-center justify-center bg-black px-4 text-white">
-        <div className={`relative flex w-full max-w-6xl items-center justify-between gap-16 py-10 transition-all duration-500 ${formVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-3'} max-[800px]:justify-center`}>
-          <div className="w-full max-w-md">
-            <h2 className="mb-14 text-6xl font-extrabold leading-none tracking-tight max-[800px]:text-5xl">What's happening now?</h2>
-            <div className="w-full">
-              {error && <p className="mb-4 text-center text-red-500">{error}</p>}
-
-              <form onSubmit={(event: FormEvent<HTMLFormElement>) => handleSubmit(event, setError)} className="space-y-3">
-                <div>
-                  <label htmlFor="email" className="sr-only">Email Address</label>
-                  <input required type="email" name="email" id="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email address" className="w-full rounded-md border border-gray-600 bg-transparent px-3 py-4 text-base text-white outline-none placeholder:text-gray-500 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400" />
-                </div>
-                <div className="relative">
-                  <label htmlFor="password" className="sr-only">Password</label>
-                  <input required type={passwordVisible ? 'text' : 'password'} id="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" className="w-full rounded-md border border-gray-600 bg-transparent px-3 py-4 pr-12 text-base text-white outline-none placeholder:text-gray-500 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400" />
-                  <button type="button" onClick={() => setPasswordVisible((visible) => !visible)} aria-label={passwordVisible ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-xl text-gray-400 hover:text-white">{passwordVisible ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}</button>
-                </div>
-                <button type="submit" disabled={!canContinue} className="w-full rounded-full bg-[#2f3336] py-3 font-bold text-[#71767b] transition enabled:bg-[#eff3f4] enabled:text-[#0f1419] enabled:hover:bg-[#d7dbdc] disabled:cursor-not-allowed">Continue</button>
-              </form>
-
-              <div className="my-7 flex items-center justify-between text-sm text-gray-500"><span className="w-5/12 border-b border-gray-700" /><span>or</span><span className="w-5/12 border-b border-gray-700" /></div>
-
-              <button type="button" onClick={() => handleGoogleLogin(setError)} className="flex w-full items-center justify-center gap-3 rounded-full bg-white py-3 font-bold text-[#0f1419] transition hover:bg-gray-200"><FcGoogle className="h-6 w-6" />Continue with Google</button><button type="button" onClick={() => setShowSignup(true)} className="flex w-full items-center justify-center gap-3 rounded-full bg-white py-3 font-bold text-[#0f1419] transition hover:bg-gray-200 mt-4">Sign up</button>
-
-              <p className="mt-5 text-center text-xs leading-snug text-gray-500">By continuing, you agree to our <a href="#terms" className="text-cyan-400 hover:underline">Terms of Service</a>, <a href="#privacy" className="text-cyan-400 hover:underline">Privacy Policy</a> and <a href="#cookies" className="text-cyan-400 hover:underline">Cookie Use</a>. </p>
-            </div>
-          </div>
-
-          <div className="login-brand relative grid min-h-[560px] flex-1 place-items-center max-[800px]:hidden" aria-hidden="true"><div className="login-x-glow" /><XIcon className="login-x-icon" /></div>
-        </div>
-      </div>
-      {showSignup && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" onClick={() => setShowSignup(false)}><div className="relative w-full max-w-[500px] rounded-3xl bg-[#16181c] p-10 text-white shadow-2xl" onClick={(event) => event.stopPropagation()}><button type="button" onClick={() => setShowSignup(false)} className="absolute left-5 top-4 text-2xl text-gray-300 hover:text-white">←</button><XIcon className="mx-auto mb-8 h-10 w-10" /><h2 className="mb-8 text-center text-3xl font-bold">Sign up</h2><form className="space-y-4" onSubmit={(event: FormEvent<HTMLFormElement>) => handleSignUp(event, setError)}><input type="email" name="email" required placeholder="Email address" className="w-full rounded-md border border-gray-600 bg-transparent px-3 py-4 text-white outline-none placeholder:text-gray-500 focus:border-cyan-400" /><input type="password" name="password" required placeholder="Password" className="w-full rounded-md border border-gray-600 bg-transparent px-3 py-4 text-white outline-none placeholder:text-gray-500 focus:border-cyan-400" /><button type="submit" className="w-full rounded-full bg-[#eff3f4] py-3 font-bold text-[#0f1419]">Continue</button></form></div></div>}
+      <LoginPage>
+        <LoginLayout $visible={formVisible}>
+          <LoginFormPanel>
+            <LoginTitle>What's happening now?</LoginTitle>
+            {error && <LoginError role="alert">{error}</LoginError>}
+            <LoginForm onSubmit={(event: FormEvent<HTMLFormElement>) => handleSubmit(event, setError)}>
+              <VisuallyHiddenLabel htmlFor="email">Email address</VisuallyHiddenLabel>
+              <LoginInput required type="email" name="email" id="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email address" />
+              <PasswordField>
+                <VisuallyHiddenLabel htmlFor="password">Password</VisuallyHiddenLabel>
+                <LoginInput required type={passwordVisible ? 'text' : 'password'} id="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" />
+                <PasswordToggle type="button" onClick={() => setPasswordVisible((visible) => !visible)} aria-label={passwordVisible ? 'Hide password' : 'Show password'}>
+                  {passwordVisible ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </PasswordToggle>
+              </PasswordField>
+              <LoginButton type="submit" disabled={!canContinue}>Continue</LoginButton>
+            </LoginForm>
+            <LoginDivider><span />or<span /></LoginDivider>
+            <LoginActions>
+              <LoginSocialButton type="button" onClick={() => handleGoogleLogin(setError)}><FcGoogle size={20} />Continue with Google</LoginSocialButton>
+              <LoginSocialButton type="button" onClick={() => setShowSignup(true)}>Sign up</LoginSocialButton>
+            </LoginActions>
+            <LoginTerms>
+              By continuing, you agree to our <a href="#terms">Terms of Service</a>, <a href="#privacy">Privacy Policy</a> and <a href="#cookies">Cookie Use</a>.
+            </LoginTerms>
+          </LoginFormPanel>
+          <LoginBrand aria-hidden="true"><LoginGlow /><LoginLogo src={starlingLogo} alt="" /></LoginBrand>
+        </LoginLayout>
+      </LoginPage>
+      {showSignup && (
+        <SignupOverlay onClick={() => setShowSignup(false)}>
+          <SignupDialog onClick={(event) => event.stopPropagation()}>
+            <SignupCloseButton type="button" onClick={() => setShowSignup(false)} aria-label="Close signup">←</SignupCloseButton>
+            <SignupLogo src={starlingLogo} alt="Starling" />
+            <SignupTitle>Sign up</SignupTitle>
+            <SignupForm onSubmit={(event: FormEvent<HTMLFormElement>) => handleSignUp(event, setError)}>
+              <LoginInput type="email" name="email" required placeholder="Email address" />
+              <LoginInput type="password" name="password" required placeholder="Password" />
+              <SignupButton type="submit">Continue</SignupButton>
+            </SignupForm>
+          </SignupDialog>
+        </SignupOverlay>
+      )}
     </>
   )
 }

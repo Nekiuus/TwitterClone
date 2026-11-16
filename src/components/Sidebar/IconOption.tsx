@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { ProfileAvatar, ProfileBox, ProfileMenu, ProfileMenuButton, SidebarIcon } from './styled';
-import avatar from '../../assets/avatar.jpeg';
+import avatar from '../../assets/avatar.png';
 import { handleLogout } from '../../Config';
 import type SvgIcon from '@mui/material/SvgIcon';
 import type { User } from 'firebase/auth';
 
-export const IconOption = ({ Icon, text, onClick }: { Icon: typeof SvgIcon; text: string; onClick?: () => void; primary?: boolean }) => {
+export const IconOption = ({ Icon, text, onClick, comingSoon }: { Icon: typeof SvgIcon; text: string; onClick?: () => void; primary?: boolean; comingSoon?: boolean }) => {
   return (
     <SidebarIcon onClick={onClick}>
         <Icon />
-        <h2>{text}</h2>
+        <div className="sidebar-label"><h2>{text}</h2>{comingSoon && <span>Coming soon</span>}</div>
     </SidebarIcon>
 
     
