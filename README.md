@@ -2,7 +2,7 @@
 
 A purple-themed social network inspired by X, built as a React + TypeScript SPA with Firebase.
 
-> University course project. Current status: **Milestone 1 – Layout and SPA structure**.
+> University course project. Current status: **Milestone 3**.
 
 ## Tech Stack
 
