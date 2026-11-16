@@ -1,6 +1,6 @@
-# X Clone
+# Starling
 
-A clone of the social network X (formerly Twitter), built as a Single Page Application (SPA) with React. Users will be able to sign up, log in, publish tweets, follow other users and see the tweets of the people they follow.
+A purple-themed social network inspired by X, built as a React + TypeScript SPA with Firebase.
 
 > University course project. Current status: **Milestone 1 – Layout and SPA structure**.
 

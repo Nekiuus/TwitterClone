@@ -6,7 +6,6 @@ export const Container = styled.div`
   height: 100vh;
   overflow-y: auto;
   color: var(--twitterColor);
-  border-right: 1px solid var(--border);
   text-align: left;
 
   .profile-header {
@@ -17,6 +16,7 @@ export const Container = styled.div`
     padding: 0 16px;
     border-bottom: 1px solid var(--border);
     gap: 16px;
+    background: rgba(28, 12, 47, 0.88);
   }
 
   .profile-header button {
@@ -36,7 +36,7 @@ export const Container = styled.div`
   }
 
   .profile-header span {
-    color: var(--text);
+    color: var(--muted-purple);
     font-size: 13px;
   }
 
@@ -46,7 +46,7 @@ export const Container = styled.div`
 
   .cover {
     height: 180px;
-    background: #333639;
+    background: linear-gradient(120deg, #a855f7, #7c3aed);
   }
 
   .profile-info {
@@ -81,28 +81,29 @@ export const Container = styled.div`
 
   .profile-info p {
     margin-top: 4px;
-    color: var(--text);
+    color: var(--muted-purple);
   }
 
   .profile-info .username {
     margin-top: 0;
+    color: #c084fc;
   }
 
   .stats {
     display: flex;
     gap: 18px;
     margin-top: 16px;
-    color: var(--text);
+    color: var(--muted-purple);
   }
 
   .stats strong {
-    color: var(--twitterColor);
+    color: #e9d5ff;
   }
 
   .stats button {
     padding: 0;
     border: 0;
-    color: var(--text);
+    color: var(--muted-purple);
     background: transparent;
     cursor: pointer;
   }
@@ -138,7 +139,7 @@ export const Container = styled.div`
   }
 
   .user-row span {
-    color: var(--text);
+    color: var(--muted-purple);
   }
 
   .user-row > button {
@@ -160,7 +161,7 @@ export const Container = styled.div`
     flex: 1;
     padding: 16px 8px;
     border: 0;
-    color: var(--text);
+    color: var(--muted-purple);
     background: transparent;
     cursor: pointer;
   }
@@ -168,7 +169,7 @@ export const Container = styled.div`
   nav button.active {
     color: var(--twitterColor);
     font-weight: 700;
-    border-bottom: 3px solid #1d9bf0;
+    border-bottom: 3px solid var(--accent);
   }
     @media (max-width: 1280px) {
   flex: 0.55;

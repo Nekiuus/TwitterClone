@@ -3,20 +3,20 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
 padding: 12px 16px;
-border-right: 1px solid var(--border);
 flex: 0 0 23%;
 min-width: 0;
 height: 100vh;
+border-right: 1px solid var(--surface-border);
 box-sizing: border-box;
 display: flex;
 flex-direction: column;
 
->.twitter-logo{
+>.starling-logo{
     display: block;
     margin: 8px 4px;
     width: 46px;
-    height: 30px;
-    fill: var(--twitterColor) !important;
+    height: 46px;
+    object-fit: contain;
 }
 >Button{
     background-color: var(--twitterColor);
@@ -38,7 +38,7 @@ flex: 0 0 80px;
 min-width: 80px;
 padding-left: 0;
 padding-right: 0;
->.twitter-logo{
+>.starling-logo{
     width: 60px;
     height: 60px;
     margin: 0 auto;
@@ -142,7 +142,7 @@ export const ProfileMenuButton = styled.button`
     }
 
     span{
-        color: var(--text);
+        color: var(--muted-purple);
         font-size: 14px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -203,10 +203,23 @@ export const SidebarIcon = styled.div`
     align-items: center;
     padding: 14px 10px;
     cursor: pointer;
->h2{
-    font-size: 20px;
+
+>.sidebar-label{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin: 0 15px 0 20px;
+    text-align: left;
+}
+>.sidebar-label h2{
+    font-size: 20px;
+    margin: 0;
     font-weight: 700;
+}
+>.sidebar-label span{
+    color: #c084fc;
+    font-size: 11px;
+    line-height: 1.2;
 }
 >.MuiSvgIcon-root{
     width: 30px;
@@ -230,7 +243,7 @@ justify-content: center;
 padding: 15px;
 margin-left: auto;
 margin-right: auto;
->h2{
+>.sidebar-label{
 display: none;
 }
 }

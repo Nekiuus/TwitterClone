@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Container } from './styled';
-import XIcon from '@mui/icons-material/X';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconOption } from './IconOption';
-import { AccountBox } from './IconOption';
+import starlingLogo from '../../assets/starling-logo.png'
+import { AccountBox, IconOption } from './IconOption';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -14,8 +13,9 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import HistoryIcon from '@mui/icons-material/History';
 import { Button } from '@mui/material';
-import avatar from '../../assets/avatar.jpeg';
 import type { User } from 'firebase/auth';
+import { TweetBox } from '../Home/TweetBox';
+import { ReplyDialog, ReplyDialogHeader, ReplyOverlay } from '../Home/styled'
 
 
 export const Sidebar = ({ user, onNavigate }: { user: User | null; onNavigate: (view: string) => void }) => {
@@ -24,17 +24,17 @@ export const Sidebar = ({ user, onNavigate }: { user: User | null; onNavigate: (
   return (
     <>
       <Container>
-        <XIcon className="twitter-logo"/>
+        <img src={starlingLogo} alt="Starling" className="starling-logo" />
 
      <IconOption Icon={GitHubIcon} onClick={() => onNavigate('home')} text="Home"/>
      <IconOption Icon={SearchIcon} onClick={() => onNavigate('explore')} text="Explore"/>
       <IconOption Icon={NotificationsNoneIcon} onClick={() => onNavigate('notifications')} text="Notifications"/>
-       <IconOption Icon={ForwardToInboxIcon} text="Messages"/>
-       <IconOption Icon={BookmarkBorderIcon} text="Bookmarks"/>
-       <IconOption primary Icon={ListIcon} text="List"/>
-       <IconOption primary Icon={HistoryIcon} text="History"/>
+       <IconOption Icon={ForwardToInboxIcon} text="Messages" comingSoon/>
+       <IconOption Icon={BookmarkBorderIcon} text="Bookmarks" comingSoon/>
+       <IconOption primary Icon={ListIcon} text="List" comingSoon/>
+       <IconOption primary Icon={HistoryIcon} onClick={() => onNavigate('history')} text="History"/>
        <IconOption Icon={PermIdentityIcon} text="Profile" onClick={() => onNavigate('profile')}/>
-       <IconOption primary Icon={MoreHorizIcon} text="More"/>
+       <IconOption primary Icon={MoreHorizIcon} text="More" comingSoon/>
        
 
 
@@ -48,22 +48,14 @@ export const Sidebar = ({ user, onNavigate }: { user: User | null; onNavigate: (
       </Container>
 
       {showPostModal && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/70 px-4 pt-10" onClick={() => setShowPostModal(false)}>
-          <div className="w-full max-w-xl rounded-2xl bg-[#16181c] p-5 text-white shadow-2xl" onClick={(event) => event.stopPropagation()}>
-            <div className="mb-5 flex items-center justify-between">
-              <button type="button" onClick={() => setShowPostModal(false)} aria-label="Close post window" className="rounded-full p-1 hover:bg-[#2f3336]"><CloseIcon /></button>
-              <button type="button" className="text-sm text-[#1d9bf0]">Drafts</button>
-            </div>
-            <div className="flex gap-3">
-              <img src={user?.photoURL || avatar} alt="User avatar" className="h-10 w-10 rounded-full object-cover" />
-              <textarea autoFocus rows={4} placeholder="What's happening?" className="w-full resize-none bg-transparent text-xl text-white outline-none placeholder:text-[#71767b]" />
-            </div>
-            <div className="mt-5 flex items-center justify-between border-t border-[#2f3336] pt-4">
-              <span className="text-sm text-[#1d9bf0]">Everyone can reply</span>
-              <button type="button" className="rounded-full bg-[#2f3336] px-5 py-2 font-bold text-[#71767b]">Post</button>
-            </div>
-          </div>
-        </div>
+        <ReplyOverlay onClick={() => setShowPostModal(false)}>
+          <ReplyDialog role="dialog" aria-modal="true" aria-label="Create post" onClick={(event) => event.stopPropagation()}>
+            <ReplyDialogHeader>
+              <button type="button" onClick={() => setShowPostModal(false)} aria-label="Close post window"><CloseIcon /></button>
+            </ReplyDialogHeader>
+            <TweetBox onPostSuccess={() => setShowPostModal(false)} />
+          </ReplyDialog>
+        </ReplyOverlay>
       )}
     </>
   )

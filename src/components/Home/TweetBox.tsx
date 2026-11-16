@@ -1,5 +1,5 @@
-import avatar from '../../assets/avatar.jpeg'
-import { TweetBoxContainer, Div, Avatar, Form, DivBox, File, PostButton, PreviewContainer, PreviewImage, PreviewVideo, RemoveMediaButton } from './styled'
+import avatar from '../../assets/avatar.png'
+import { TweetBoxContainer, Div, Avatar, Form, DivBox, File, PostButton, PreviewContainer, PreviewImage, PreviewVideo, RemoveMediaButton, CharacterProgress, MediaUploadLabel, ReplyingTo } from './styled'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import GifBoxOutlinedIcon from '@mui/icons-material/GifBoxOutlined'
 import PollOutlinedIcon from '@mui/icons-material/PollOutlined'
@@ -7,12 +7,18 @@ import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSati
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { useMedia } from '../../contexts/useMedia'
+import type { ReplyTarget } from '../../contexts/mediaContext'
 import { auth } from '../../Config'
 
-export const TweetBox = () => {
+const MAX_POST_LENGTH = 280
+
+export const TweetBox = ({ onPostSuccess, replyTo }: { onPostSuccess?: () => void; replyTo?: ReplyTarget } = {}) => {
   const { selectedMedia, saveMedia, clearMedia, publishPost } = useMedia()
   const [text, setText] = useState('')
+  const [isPosting, setIsPosting] = useState(false)
+  const [postError, setPostError] = useState('')
   const postReady = Boolean(text.trim() || selectedMedia);
+  const characterProgress = Math.min(text.length / MAX_POST_LENGTH, 1)
 
   const handleMediaChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files?.[0]
@@ -25,39 +31,45 @@ export const TweetBox = () => {
       return
     }
 
-    const media = saveMedia(file)
-    console.log('Media saved locally in the React context:', {
-      name: media.name,
-      type: media.type,
-      size: media.size,
-      url: media.url,
-    })
+    saveMedia(file)
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const user = auth.currentUser
     const emailName = user?.email?.split('@')[0]
-    publishPost({
-      name: user?.displayName || emailName || 'You',
-      username: user?.email ? `@${emailName}` : '@you',
-      avatar: user?.photoURL || avatar,
-      text: text.trim(),
-    })
-    setText('')
+    setIsPosting(true)
+    setPostError('')
+
+    try {
+      await publishPost({
+        name: user?.displayName || emailName || 'You',
+        username: user?.email ? `@${emailName}` : '@you',
+        avatar: user?.photoURL || avatar,
+        text: text.trim(),
+      }, replyTo)
+      setText('')
+      onPostSuccess?.()
+    } catch (error) {
+      console.error('Unable to publish post:', error)
+      setPostError(error instanceof Error ? error.message : 'Unable to publish post.')
+    } finally {
+      setIsPosting(false)
+    }
   }
 
   return (
     <TweetBoxContainer>
       <Form onSubmit={handleSubmit}>
+        {replyTo && <ReplyingTo>Replying to {replyTo.username}</ReplyingTo>}
         <Div>
-          <Avatar src={avatar} alt="User Avatar" />
+          <Avatar src={auth.currentUser?.photoURL || avatar} alt="User Avatar" />
           <textarea
             rows={1}
-            maxLength={280}
+            maxLength={MAX_POST_LENGTH}
             value={text}
-            placeholder="What's happening?"
+            placeholder={replyTo ? 'Post your reply' : "What's happening?"}
             onChange={(event) => {
               const value = event.target.value;
               setText(value);
@@ -65,9 +77,17 @@ export const TweetBox = () => {
               event.target.style.height = `${event.target.scrollHeight}px`;
             }}
           />
-          <span>{text.length}/280</span>
+          <CharacterProgress
+            role="progressbar"
+            aria-label="Character limit"
+            aria-valuemin={0}
+            aria-valuemax={MAX_POST_LENGTH}
+            aria-valuenow={text.length}
+            $progress={characterProgress}
+          />
 
         </Div>
+        {postError && <p className="mt-3 text-sm text-red-500" role="alert">{postError}</p>}
         {/*Preview of selected media*/}
         {selectedMedia && (
         <PreviewContainer>
@@ -96,10 +116,10 @@ export const TweetBox = () => {
 
         <Div className="tweet-actions">
           <DivBox>
-            <label
+            <MediaUploadLabel
               htmlFor="tweet-media"
               aria-label="Select image or video"
-              style={{ position: 'relative', display: 'inline-flex', cursor: 'pointer' }}
+              $selected={Boolean(selectedMedia)}
             >
               <ImageOutlinedIcon />
               <File
@@ -107,9 +127,8 @@ export const TweetBox = () => {
                 type="file"
                 accept="image/*,video/*"
                 onChange={handleMediaChange}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', maxWidth: 'none', padding: 0 }}
               />
-            </label>
+            </MediaUploadLabel>
             <GifBoxOutlinedIcon />
             <PollOutlinedIcon />
             <SentimentSatisfiedAltOutlinedIcon />
@@ -119,9 +138,9 @@ export const TweetBox = () => {
             $ready={postReady}
             variant="contained"
             type="submit"
-            disabled={!postReady}
+            disabled={!postReady || isPosting}
           >
-            Post
+            {isPosting ? 'Saving post...' : replyTo ? 'Reply' : 'Post'}
           </PostButton>
         </Div>
       </Form>

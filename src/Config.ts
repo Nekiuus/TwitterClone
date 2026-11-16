@@ -1,15 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-  browserLocalPersistence,
-  getAuth,
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  setPersistence,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  type User,
-} from "firebase/auth";
+import { browserLocalPersistence, getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, setPersistence, signInWithEmailAndPassword, signInWithPopup, signOut, type User } from "firebase/auth";
 import { getFirestore, doc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
 import type { Dispatch, FormEvent, SetStateAction } from "react";
 
@@ -43,7 +33,6 @@ const handleSignUp = async (event: FormEvent<HTMLFormElement>, setError: SetErro
     await authPersistence;
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
     await saveUserProfile(userCred.user);
-    console.log('User signed up:', userCred.user);
     setError('');
   } catch (err) {
     console.log(err);
@@ -58,7 +47,6 @@ const handleGoogleLogin = async (setError: SetError) => {
     const result = await signInWithPopup(auth, googleProvider);
     await saveUserProfile(result.user);
     setError('');
-    console.log('Google Sign-In', result.user);
   } catch (err) {
     console.log(err)
     setError('Google Sign-In failed')
@@ -69,7 +57,8 @@ const handleGoogleLogin = async (setError: SetError) => {
 //HANDLE LOGIN EMAIL AND PASSWORD
 const handleSubmit = async (event: FormEvent<HTMLFormElement>, setError: SetError) => {
   event.preventDefault();
-  const formData = new FormData(event.currentTarget);
+  const form = event.currentTarget;
+  const formData = new FormData(form);
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
 
@@ -77,14 +66,13 @@ const handleSubmit = async (event: FormEvent<HTMLFormElement>, setError: SetErro
       await authPersistence;
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       await saveUserProfile(userCred.user);
-      console.log('User signed in:', userCred.user);
       setError('')
   } catch (err) {
     console.log(err);
     setError('Invalid email or password');
     
   }
-  event.currentTarget.reset();
+  form.reset();
 }
 //Follow and Unfollow function
 export const db = getFirestore(app)
@@ -163,4 +151,4 @@ export async function toggleFollow(currentUid: string, targetUid: string) {
   })
 }
 
-export { auth, googleProvider, handleGoogleLogin, handleSubmit, handleLogout, handleSignUp }
+export { auth, handleGoogleLogin, handleSubmit, handleLogout, handleSignUp }

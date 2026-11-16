@@ -7,7 +7,7 @@ import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '../../Config'
 import { useEffect, useState } from 'react'
 import type { User } from 'firebase/auth'
-import avatar from '../../assets/avatar.jpeg'
+import avatar from '../../assets/avatar.png'
 
 
 
@@ -33,18 +33,19 @@ interface ProfileListUser {
 
 type ListView = 'Followers' | 'Following'
 
-const UserList = ({ title, users, username, onBack }: {
+const UserList = ({ title, users, username, onBack, onChange }: {
   title: ListView
   users: ProfileListUser[]
   username: string
   onBack: () => void
+  onChange: (view: ListView) => void
 }) => (
   <Container>
     <header className="profile-header list-header">
       <button type="button" onClick={onBack} aria-label="Back to profile"><ArrowBackIcon /></button>
       <div><h2>{title}</h2><span>{username}</span></div>
     </header>
-    <nav className="list-tabs"><button type="button" className={title === 'Followers' ? 'active' : ''}>Followers</button><button type="button" className={title === 'Following' ? 'active' : ''}>Following</button></nav>
+    <nav className="list-tabs"><button type="button" className={title === 'Followers' ? 'active' : ''} onMouseEnter={() => onChange('Followers')} onClick={() => onChange('Followers')}>Followers</button><button type="button" className={title === 'Following' ? 'active' : ''} onMouseEnter={() => onChange('Following')} onClick={() => onChange('Following')}>Following</button></nav>
     <div className="user-list">{users.map((person) => {
       const username = person.username || person.email?.split('@')[0] || person.uid
       const name = person.displayName && person.displayName !== person.email
@@ -125,7 +126,7 @@ useEffect(() => {
   
 
   if (listView) {
-    return <UserList title={listView} users={users} username={username} onBack={() => setListView(null)} />
+    return <UserList title={listView} users={users} username={username} onBack={() => setListView(null)} onChange={setListView} />
   }
 
   return (

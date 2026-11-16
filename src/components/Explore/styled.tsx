@@ -6,7 +6,6 @@ export const Container = styled.main`
   height: 100vh;
   overflow-y: auto;
   color: var(--twitterColor);
-  border-right: 1px solid var(--border);
   text-align: left;
 
   .explore-search {
@@ -17,7 +16,8 @@ export const Container = styled.main`
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    background: var(--bg);
+    background: rgba(28, 12, 47, 0.92);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
 
@@ -53,7 +53,8 @@ export const Container = styled.main`
     z-index: 1;
     display: flex;
     overflow-x: auto;
-    background: var(--bg);
+    background: rgba(28, 12, 47, 0.92);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
     .explore-tabs::-webkit-scrollbar {
@@ -73,7 +74,7 @@ export const Container = styled.main`
   .explore-tabs button.active {
     color: var(--twitterColor);
     font-weight: 700;
-    border-bottom: 3px solid #1d9bf0;
+    border-bottom: 3px solid var(--accent);
   }
 
   .news-section,

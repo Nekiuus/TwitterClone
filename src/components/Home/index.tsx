@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Container, Header } from './styled'
+import { Container, FeedEmpty, Header, HistoryEmpty, HistoryHeader, HistoryTabs } from './styled'
 import { TweetBox } from './TweetBox'
-import { Post } from './Post'
+import { Post, type PostProps } from './Post'
 import { Profile } from '../Profile'
 import { Explore } from '../Explore'
 import { useMedia } from '../../contexts/useMedia'
 import type { User } from 'firebase/auth'
-import type { PostProps } from './Post'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Notifications } from '../Notifications'
 
 const posts: PostProps[] = [
 
@@ -57,26 +58,13 @@ const posts: PostProps[] = [
   { id: 5, name: 'Kitties Videos', type: 'video', username: '@KittiesVids', time: '5h', avatar: 'https://pbs.twimg.com/profile_images/1900925831767261184/0IWMn5TF_400x400.jpg', text: '', video: 'https://res.cloudinary.com/tahstxat/video/upload/v1793402393/n3c5sfag_oDmsny8.mp4', replies: 8, reposts: 12, likes: 64, views: '1.8K' },
 ]
 
-const followingPosts: PostProps[] = [
-    { id: 109, name: 'Emma', username: '@emma_nature', time: '10h', avatar: 'https://randomuser.me/api/portraits/women/49.jpg', text: 'Old Classic', image: 'https://pbs.twimg.com/media/HW37yLcbEAAcTEh?format=jpg&name=medium', replies: 13, reposts: 20, likes: 156, views: '4.6K' },
-  { id: 101, name: 'KaelWorks', username: '@SGarzonart', time: 'Jan 01', avatar: 'https://pbs.twimg.com/profile_images/2008207775969542145/AnBNNvdG_400x400.jpg', text: 'A bit late, but.... happy 2026!! 🎇📷Wishing you progress, peace, and big wins this year.🥂', image: 'https://pbs.twimg.com/media/G96l1yXWcAAdFH2?format=jpg&name=medium', replies: 8, reposts: 12, likes: 64, views: '1.8K' },
-  { id: 102, name: 'Sua', type: 'video', username: '@suaverotic', time: '3h', avatar: 'https://pbs.twimg.com/profile_images/2096249887398432769/16KWo33l_400x400.jpg', text: 'me after crying for 3hrs', video: 'https://res.cloudinary.com/tahstxat/video/upload/v1793402903/JGZx12ThxSlaMu4d.mp4', replies: 14, reposts: 9, likes: 87, views: '2.4K' },
-  { id: 103, name: 'Luna', username: '@lunatravels', time: '4h', avatar: 'https://randomuser.me/api/portraits/women/68.jpg', text: '', image: 'https://pbs.twimg.com/media/HW6xPTSWQAA3PGj?format=jpg&name=large', replies: 21, reposts: 18, likes: 143, views: '4.1K' },
-  { id: 104, name: 'Noah', username: '@noahdesigns', time: '5h', avatar: 'https://randomuser.me/api/portraits/men/41.jpg', text: '', image: 'https://pbs.twimg.com/media/HW8VeY9agAANFnw?format=jpg&name=large', replies: 5, reposts: 7, likes: 52, views: '1.1K' },
-  { id: 105, name: 'Sofia', username: '@sofiapaints', time: '6h', avatar: 'https://randomuser.me/api/portraits/women/32.jpg', text: '', image: 'https://pbs.twimg.com/media/HW_8aDkacAA3GuX?format=jpg&name=large', replies: 11, reposts: 15, likes: 98, views: '2.8K' },
-  { id: 106, name: 'Ethan', username: '@ethanruns', time: '7h', avatar: 'https://randomuser.me/api/portraits/men/55.jpg', text: '', image: 'https://pbs.twimg.com/media/HW8fnklXMAE0DmL?format=jpg&name=large', replies: 6, reposts: 4, likes: 39, views: '900' },
-  { id: 107, name: 'Nora', username: '@nora_reads', time: '8h', avatar: 'https://randomuser.me/api/portraits/women/12.jpg', text: 'A good book makes the day better.', image: 'https://pbs.twimg.com/media/HW6JX_jbwAALxf5?format=jpg&name=medium', replies: 18, reposts: 10, likes: 76, views: '1.9K' },
-  { id: 108, name: 'Leo', username: '@leo_music', time: '9h', avatar: 'https://randomuser.me/api/portraits/men/76.jpg', text: 'New playlist is finally ready.', image: 'https://pbs.twimg.com/media/HW4GNy-XEAAZ9Tj?format=jpg&name=large', replies: 9, reposts: 13, likes: 112, views: '3.2K' },
-  { id: 110, name: 'Oliver', username: '@oliverwrites', time: '12h', avatar: 'https://randomuser.me/api/portraits/men/15.jpg', text: '', image: 'https://pbs.twimg.com/media/HW7sdCUWwAARiKY?format=jpg&name=medium', replies: 4, reposts: 6, likes: 47, views: '1.3K' },
-]
-
 export const Home = ({ user, currentView, onNavigate }: {
   user: User | null
   currentView: string
   onNavigate: (view: string) => void
 }) => {
-  const [activeTab, setActiveTab] = useState('for-you')
-  const { posts: localPosts } = useMedia()
+  const [activeTab, setActiveTab] = useState<'for-you' | 'following'>('for-you')
+  const { posts: publishedPosts, followedUserIds, likedPostIds, localLikedPostIds, localLikedPosts, feedError } = useMedia()
 
   if (currentView === 'explore') {
     return <Explore user={user} />
@@ -84,6 +72,39 @@ export const Home = ({ user, currentView, onNavigate }: {
   if (currentView === 'profile') {
     return <Profile user={user} onNavigate={onNavigate} />
   }
+  if (currentView === 'notifications') {
+    return <Notifications user={user} />
+  }
+
+  const allPosts = [...publishedPosts, ...posts]
+  if (currentView === 'history') {
+    const uniquePosts = [...new Map([...allPosts, ...localLikedPosts].map((post) => [String(post.id), post])).values()]
+    const likedPosts = uniquePosts.filter((post) => (
+      likedPostIds.has(String(post.id)) || localLikedPostIds.has(String(post.id))
+    ))
+
+    return (
+      <Container>
+        <HistoryHeader>
+          <button type="button" aria-label="Back to home" onClick={() => onNavigate('home')}><ArrowBackIcon /></button>
+          <h2>History</h2>
+        </HistoryHeader>
+        <HistoryTabs><span>Likes</span></HistoryTabs>
+        {feedError && <p className="p-4 text-sm text-red-500" role="alert">{feedError}</p>}
+        {!likedPosts.length && <HistoryEmpty>You haven't liked any posts yet.</HistoryEmpty>}
+        {likedPosts.map((post) => <Post key={`liked-${post.id}`} {...post} />)}
+      </Container>
+    )
+  }
+
+  const visiblePosts = activeTab === 'following'
+    ? publishedPosts.filter((post) => (
+      post.authorUid !== undefined
+      && post.authorUid !== user?.uid
+      && followedUserIds.has(post.authorUid)
+    ))
+    : allPosts
+
   return (
     <Container>
       <Header>
@@ -94,7 +115,11 @@ export const Home = ({ user, currentView, onNavigate }: {
 
       <TweetBox />
 
-      {[...localPosts, ...(activeTab === 'following' ? followingPosts : posts)].map((post) => (
+      {feedError && <p className="p-4 text-sm text-red-500" role="alert">{feedError}</p>}
+      {activeTab === 'following' && visiblePosts.length === 0 && (
+        <FeedEmpty>No posts from accounts you follow yet.</FeedEmpty>
+      )}
+      {visiblePosts.map((post) => (
         <Post key={post.id} {...post} />
       ))}
     </Container>
