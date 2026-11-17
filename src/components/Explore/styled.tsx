@@ -90,12 +90,14 @@ export const Container = styled.main`
     font-size: 19px;
   }
 
+  .news-updated {
+    margin: -4px 0 8px;
+    color: var(--muted-purple);
+    font-size: 12px;
+  }
+
   .news-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 0;
+    padding: 16px 0;
     border-bottom: 1px solid var(--border);
   }
 
@@ -103,32 +105,44 @@ export const Container = styled.main`
     border-bottom: 0;
   }
 
-  .news-card > div:first-child,
+  .news-card a,
   .user-details {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 7px;
     min-width: 0;
+    color: inherit;
+    text-decoration: none;
   }
 
   .news-card strong {
     color: var(--twitterColor);
-    font-size: 14px;
+    font-size: 16px;
   }
 
-  .news-card span,
+  .news-card p {
+    margin: 0;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .news-card .news-meta,
+  .news-card .news-link,
   .results-section > p,
   .user-details span {
-    color: var(--text);
+    color: var(--muted-purple);
     font-size: 13px;
   }
 
-  .news-image {
-    flex: 0 0 68px;
-    width: 68px;
-    height: 68px;
-    border-radius: 12px;
-    object-fit: cover;
+  .news-card .news-link {
+    color: #c084fc;
+    font-weight: 700;
+  }
+
+  .news-card a:hover strong,
+  .news-card a:hover .news-link {
+    color: #d8b4fe;
   }
 
   .user-result {
@@ -139,7 +153,21 @@ export const Container = styled.main`
     border-bottom: 1px solid var(--border);
   }
 
-  .user-result img {
+  .user-result .profile-link {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 12px;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .user-result .profile-link img {
     width: 44px;
     height: 44px;
     border-radius: 50%;

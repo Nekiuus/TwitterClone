@@ -258,6 +258,30 @@ export function MediaProvider({ children }: { children: ReactNode }) {
     }
   }, [user])
 
+  const recordPostView = useCallback(async (postId: string, authorUid?: string) => {
+    if (!user || authorUid === user.uid) return
+
+    const postRef = doc(db, 'posts', postId)
+    const viewRef = doc(db, 'posts', postId, 'views', user.uid)
+    const result = await runTransaction(db, async (transaction) => {
+      const [postSnapshot, viewSnapshot] = await Promise.all([
+        transaction.get(postRef),
+        transaction.get(viewRef),
+      ])
+      if (!postSnapshot.exists() || viewSnapshot.exists()) return null
+
+      const currentViews = Number(postSnapshot.data().views)
+      const nextViews = (Number.isFinite(currentViews) ? currentViews : 0) + 1
+      transaction.set(viewRef, { viewerUid: user.uid, createdAt: serverTimestamp() })
+      transaction.update(postRef, { views: nextViews })
+      return nextViews
+    })
+
+    if (result !== null) {
+      setPosts((currentPosts) => currentPosts.map((post) => post.id === postId ? { ...post, views: result } : post))
+    }
+  }, [user])
+
   useEffect(() => {
     const postsQuery = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(100))
     const mediaObjectUrls = new Set<string>()
@@ -407,6 +431,7 @@ export function MediaProvider({ children }: { children: ReactNode }) {
       startReply,
       clearReplyTarget,
       deletePost,
+      recordPostView,
     }),
     [
       selectedMedia,
@@ -429,6 +454,7 @@ export function MediaProvider({ children }: { children: ReactNode }) {
       startReply,
       clearReplyTarget,
       deletePost,
+      recordPostView,
     ],
   )
 

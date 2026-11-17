@@ -32,7 +32,7 @@ export interface MediaPost {
   replies?: number
   reposts?: number
   likes?: number
-  views?: string
+  views?: number | string
   createdAt?: Timestamp
 }
 
@@ -66,6 +66,7 @@ export interface MediaContextValue {
   startReply: (replyTarget: ReplyTarget) => void
   clearReplyTarget: () => void
   deletePost: (postId: string) => Promise<void>
+  recordPostView: (postId: string, authorUid?: string) => Promise<void>
 }
 
 export const MediaContext = createContext<MediaContextValue | null>(null)

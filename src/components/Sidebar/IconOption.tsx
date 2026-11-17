@@ -4,6 +4,7 @@ import avatar from '../../assets/avatar.png';
 import { handleLogout } from '../../Config';
 import type SvgIcon from '@mui/material/SvgIcon';
 import type { User } from 'firebase/auth';
+import { useAuth } from '../../contexts/useAuth'
 
 export const IconOption = ({ Icon, text, onClick, comingSoon }: { Icon: typeof SvgIcon; text: string; onClick?: () => void; primary?: boolean; comingSoon?: boolean }) => {
   return (
@@ -19,7 +20,8 @@ export const IconOption = ({ Icon, text, onClick, comingSoon }: { Icon: typeof S
 
 export const AccountBox = ({ user }: { user: User | null }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(user?.photoURL || avatar);
+  const { profile } = useAuth()
+  const profileImage = profile?.customPhotoURL || user?.photoURL || avatar
 
   return (
     <ProfileBox>
@@ -32,7 +34,7 @@ export const AccountBox = ({ user }: { user: User | null }) => {
         <ProfileAvatar
           src={profileImage}
           alt={`${user?.displayName || 'User'} avatar`}
-          onError={() => setProfileImage(avatar)}
+          onError={(event) => { event.currentTarget.src = avatar }}
         />
         <div>
           <strong>{user?.displayName || user?.email || 'User'}</strong>
