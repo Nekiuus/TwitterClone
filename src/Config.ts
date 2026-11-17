@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { browserLocalPersistence, getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, setPersistence, signInWithEmailAndPassword, signInWithPopup, signOut, type User } from "firebase/auth";
-import { getFirestore, doc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, query, runTransaction, serverTimestamp, setDoc, where, writeBatch } from "firebase/firestore";
 import type { Dispatch, FormEvent, SetStateAction } from "react";
 
 const firebaseConfig = {
@@ -84,6 +84,7 @@ interface UserProfile {
   usernameKey: string;
   displayName: string;
   photoURL: string;
+  customPhotoURL?: string;
 }
 
 export async function saveUserProfile(user: User) {
@@ -101,6 +102,20 @@ await setDoc(doc(db, "users", user.uid), {
  { merge: true });
 }
 
+export async function saveProfileImage(uid: string, type: 'avatar' | 'banner', dataUrl: string) {
+  const field = type === 'avatar' ? 'customPhotoURL' : 'bannerURL'
+  await setDoc(doc(db, 'users', uid), { [field]: dataUrl, updatedAt: serverTimestamp() }, { merge: true })
+
+  if (type === 'avatar') {
+    const userPosts = await getDocs(query(collection(db, 'posts'), where('authorUid', '==', uid)))
+    for (let index = 0; index < userPosts.docs.length; index += 20) {
+      const batch = writeBatch(db)
+      userPosts.docs.slice(index, index + 20).forEach((post) => batch.update(post.ref, { avatar: dataUrl }))
+      await batch.commit()
+    }
+  }
+}
+
 function relationshipProfile(profile: Partial<UserProfile>, uid: string) {
   const email = profile.email || "";
   const username = profile.username || email.split("@")[0] || uid;
@@ -113,7 +128,7 @@ function relationshipProfile(profile: Partial<UserProfile>, uid: string) {
     username,
     email,
     displayName,
-    photoURL: profile.photoURL || "",
+    photoURL: profile.customPhotoURL || profile.photoURL || "",
   };
 }
 

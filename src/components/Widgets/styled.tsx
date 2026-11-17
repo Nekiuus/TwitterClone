@@ -28,9 +28,63 @@ export const Header = styled.header`
   height: 70px;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 5;
   padding: 10px 16px 8px;
   box-sizing: border-box;
+`
+
+export const SearchResults = styled.div`
+  position: absolute;
+  top: 62px;
+  right: 16px;
+  left: 16px;
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  background: #180d24;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+
+  > p {
+    margin: 0;
+    padding: 14px 16px;
+    color: var(--muted-purple);
+  }
+
+  > button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 0;
+    color: var(--twitterColor);
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  > button:hover {
+    background: var(--Hover);
+  }
+
+  img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  span {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 3px;
+  }
+
+  small {
+    color: var(--muted-purple);
+  }
 `
 
 export const DivIcon = styled.div`
@@ -108,6 +162,89 @@ export const PremiumButton = styled.button`
 
   &:hover {
     filter: brightness(1.12);
+  }
+`
+
+export const SubscribeOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(3, 1, 8, 0.76);
+`
+
+export const SubscribeDialog = styled.section`
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: 30px 32px;
+  border: 1px solid var(--surface-border);
+  border-radius: 22px;
+  color: var(--twitterColor);
+  background: linear-gradient(145deg, #211033, #100819);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  text-align: left;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  h2 {
+    margin: 0;
+    color: #f6eaff;
+    font-size: 24px;
+  }
+
+  header button {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    color: var(--twitterColor);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  header button:hover {
+    background: var(--Hover);
+  }
+
+  p {
+    margin: 20px 0;
+    color: #d3c3e3;
+    line-height: 1.5;
+  }
+
+  ul {
+    margin: 24px 0;
+    padding: 18px 0 18px 24px;
+    border-top: 1px solid var(--surface-border);
+    border-bottom: 1px solid var(--surface-border);
+  }
+
+  li {
+    padding: 7px 0;
+    color: #e6d9f1;
+    line-height: 1.5;
+  }
+
+  .dismiss {
+    width: 100%;
+    margin-top: 4px;
+    padding: 14px;
+    border: 0;
+    border-radius: 999px;
+    color: white;
+    background: linear-gradient(110deg, #a855f7, #7c3aed);
+    font-weight: 700;
+    cursor: pointer;
   }
 `
 

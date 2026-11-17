@@ -8,12 +8,13 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { useMedia } from '../../contexts/useMedia'
 import type { ReplyTarget } from '../../contexts/mediaContext'
-import { auth } from '../../Config'
+import { useAuth } from '../../contexts/useAuth'
 
 const MAX_POST_LENGTH = 280
 
 export const TweetBox = ({ onPostSuccess, replyTo }: { onPostSuccess?: () => void; replyTo?: ReplyTarget } = {}) => {
   const { selectedMedia, saveMedia, clearMedia, publishPost } = useMedia()
+  const { user, profile } = useAuth()
   const [text, setText] = useState('')
   const [isPosting, setIsPosting] = useState(false)
   const [postError, setPostError] = useState('')
@@ -37,7 +38,6 @@ export const TweetBox = ({ onPostSuccess, replyTo }: { onPostSuccess?: () => voi
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const user = auth.currentUser
     const emailName = user?.email?.split('@')[0]
     setIsPosting(true)
     setPostError('')
@@ -46,7 +46,7 @@ export const TweetBox = ({ onPostSuccess, replyTo }: { onPostSuccess?: () => voi
       await publishPost({
         name: user?.displayName || emailName || 'You',
         username: user?.email ? `@${emailName}` : '@you',
-        avatar: user?.photoURL || avatar,
+        avatar: profile?.customPhotoURL || user?.photoURL || avatar,
         text: text.trim(),
       }, replyTo)
       setText('')
@@ -64,7 +64,7 @@ export const TweetBox = ({ onPostSuccess, replyTo }: { onPostSuccess?: () => voi
       <Form onSubmit={handleSubmit}>
         {replyTo && <ReplyingTo>Replying to {replyTo.username}</ReplyingTo>}
         <Div>
-          <Avatar src={auth.currentUser?.photoURL || avatar} alt="User Avatar" />
+          <Avatar src={profile?.customPhotoURL || user?.photoURL || avatar} alt="User Avatar" />
           <textarea
             rows={1}
             maxLength={MAX_POST_LENGTH}

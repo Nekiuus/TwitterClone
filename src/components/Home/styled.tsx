@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+  import styled from 'styled-components';
 import { Button as MuiButton } from '@mui/material';
 
 
@@ -105,6 +105,14 @@ export const HistoryHeader = styled.header`
   }
 `
 
+export const PostDetailHeader = styled(HistoryHeader)`
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(28, 12, 47, 0.94);
+  backdrop-filter: blur(14px);
+`
+
 export const HistoryTabs = styled.div`
   display: flex;
   justify-content: center;
@@ -141,6 +149,24 @@ export const FeedEmpty = styled.p`
   color: var(--muted-purple);
   font-weight: 700;
   text-align: center;
+`
+
+export const ShowMoreButton = styled.button`
+  display: block;
+  margin: 12px auto 20px;
+  padding: 9px 18px;
+  border: 1px solid var(--surface-border);
+  border-radius: 999px;
+  color: #e9d5ff;
+  background: rgba(76, 29, 117, 0.72);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover {
+    background: #7c3aed;
+  }
 `
 
 export const ReplyingTo = styled.p`
@@ -318,9 +344,34 @@ export const PostBody = styled.div`
     gap: 4px;
   }
 
+  .post-header h3 button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .post-header h3 .post-author-name {
+    color: var(--twitterColor);
+    font-weight: 700;
+  }
+
   .post-header h3 .post-username {
     color: #c084fc;
     font-weight: 400;
+  }
+
+  .post-header h3 button:hover {
+    text-decoration: underline;
+  }
+
+  .post-header h3 button:disabled {
+    cursor: default;
+  }
+
+  .post-header h3 button:disabled:hover {
+    text-decoration: none;
   }
 
   .post-header h3 .post-time {
@@ -404,6 +455,28 @@ export const PostContainer = styled.div`
   border-top: 1px solid var(--surface-border);
   display: flex;
   align-items: flex-start;
+
+  &.post-clickable {
+    cursor: pointer;
+    transition: background 120ms ease;
+  }
+
+  &.post-clickable:hover {
+    background: rgba(192, 132, 252, 0.035);
+  }
+
+  .post-avatar {
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .post-avatar:disabled {
+    cursor: default;
+  }
 `
 
 export const PostDescription = styled.div`

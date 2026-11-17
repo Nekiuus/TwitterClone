@@ -3,42 +3,20 @@ import SearchIcon from '@mui/icons-material/Search';
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import {db, toggleFollow} from '../../Config';
 import { Container } from './styled';
-import { collection, onSnapshot, endAt, limit, orderBy, query, startAt } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import avatar from '../../assets/avatar.png';
 import type { User } from 'firebase/auth';
+import type { ProfileAccount } from '../AuthenticatedApp'
+import { useUserSearch } from '../../hooks/useUserSearch'
+import { newsByCategory, type NewsCategory } from './news'
 
-interface SearchResult {
-    uid: string;
-    username?: string;
-    email?: string;
-    displayName?: string;
-    photoURL?: string;
-}
+const tabs = ['Explore', 'Trending', 'News', 'Sports', 'Entertainment'] as const
+type ExploreTab = typeof tabs[number]
 
-const news = [
-    {
-        title: "Nvidea CEO cheated on his wife with two baddies",
-        detail: "Tecnology · Today",
-        image: "https://static.toiimg.com/thumb/msid-135698868,imgsize-74958,width-400,height-225,resizemode-4/135698868.jpg"
-    },
-    {
-        title: "Companies increase their investment in data centers",
-        detail: "Tecnology · Today",
-        image: "https://nevadanewsgroup.media.clients.ellingtoncms.com/img/photos/2025/07/30/NV1_Rendering_Vantage_Data_Centers_t670.jpg?b3f6a5d7692ccc373d56e40cf708e3fa67d9af9d"
-    },
-    {
-        title: "Merchants are attending to the new trends in e-commerce",
-        detail: "Business · Today",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTiPLjcTivPuv0piQ2DPfK9LDwuINMbPD23c-WEgWXmFRkAt3kG_uig722&s=10" 
-    },
-]
-
-
-export const Explore = ({ user }: { user: User | null }) => {
-    const [terms, setTerms] = useState('');
-    const [results, setResults] = useState<SearchResult[]>([]);
+export const Explore = ({ user, onOpenProfile }: { user: User | null; onOpenProfile: (profile: ProfileAccount) => void }) => {
+    const { term: terms, results, loading, error: searchError, search } = useUserSearch(user)
+    const [activeTab, setActiveTab] = useState<ExploreTab>('Explore')
     const [following, setFollowing] = useState<Set<string>>(new Set());
-    const [loading, setLoading] = useState(false);
     const [busyUid, setBusyUid] = useState<string | null>(null);
     const [error, setError] = useState('');
 
@@ -57,36 +35,6 @@ export const Explore = ({ user }: { user: User | null }) => {
   );
 }, [user?.uid]);
 
-useEffect(() => {
-    const usernameKey = terms.trim().replace(/^@/, '').toLowerCase();
-    if (!usernameKey || !user?.uid) return;
-
-    const usersQuery = query(
-        collection(db, 'users'),
-        orderBy('usernameKey'),
-        startAt(usernameKey),
-        endAt(usernameKey + '\uf8ff'),
-        limit(10)
-    );
-
-    return onSnapshot(
-        usersQuery,
-        (snapshot) => {
-            setResults(
-                snapshot.docs
-                    .filter((item) => item.id !== user.uid)
-                    .map((item) => ({ ...item.data(), uid: item.id }) as SearchResult)
-            );
-            setLoading(false);
-        },
-        (snapshotError) => {
-            console.error('Unable to search users:', snapshotError);
-            setError('Unable to search users');
-            setLoading(false);
-        }
-    );
-}, [terms, user?.uid]);
-
 async function handleFollow(targetUid: string) {
     if (!user?.uid) return;
     setBusyUid(targetUid);
@@ -102,6 +50,10 @@ async function handleFollow(targetUid: string) {
     };
 }
 
+const stories = activeTab === 'Explore'
+  ? [newsByCategory.Trending[0], newsByCategory.News[0], newsByCategory.Sports[0], newsByCategory.Entertainment[0]]
+  : newsByCategory[activeTab as NewsCategory]
+
 return (
     <Container>
       <header className="explore-search">
@@ -110,17 +62,8 @@ return (
           <input
             value={terms}
             onChange={(event) => {
-              const value = event.target.value;
-              setTerms(value);
-
-              if (!value.trim()) {
-                setResults([]);
-                setLoading(false);
-                setError('');
-              } else {
-                setLoading(true);
-                setError('');
-              }
+              search(event.target.value)
+              setError('')
             }}
             placeholder="Search users"
             aria-label="Buscar usuarios"
@@ -132,23 +75,22 @@ return (
       </header>
 
       <nav className="explore-tabs">
-        <button className="active" type="button">Explore</button>
-        <button type="button">Trending</button>
-        <button type="button">News</button>
-        <button type="button">Sports</button>
-        <button type="button">Entertainment</button>
+        {tabs.map((tab) => (
+          <button key={tab} className={activeTab === tab ? 'active' : ''} type="button" onClick={() => setActiveTab(tab)}>{tab}</button>
+        ))}
       </nav>
 
       <section className="news-section">
-        <h2>Today&apos;s News</h2>
-
-        {news.map((item) => (
+        <h2>{activeTab === 'Explore' ? 'Latest headlines' : activeTab}</h2>
+        <p className="news-updated">Selección actualizada el 15 de noviembre de 2026</p>
+        {stories.map((item) => (
           <article className="news-card" key={item.title}>
-            <div>
+            <a href={item.url} target="_blank" rel="noreferrer">
+              <span className="news-meta">{item.source} · {new Date(`${item.date}T12:00:00`).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' })}</span>
               <strong>{item.title}</strong>
-              <span>{item.detail}</span>
-            </div>
-            <img className="news-image" src={item.image} alt={item.title} />
+              <p>{item.summary}</p>
+              <span className="news-link">Leer noticia ↗</span>
+            </a>
           </article>
         ))}
       </section>
@@ -158,9 +100,9 @@ return (
 
         {!terms.trim() && <p>Busca por nombre de usuario, por ejemplo: test2.</p>}
         {loading && <p>Buscando...</p>}
-        {error && <p className="error-message" role="alert">{error}</p>}
+        {(searchError || error) && <p className="error-message" role="alert">{searchError || error}</p>}
 
-        {!loading && terms.trim() && results.length === 0 && !error && (
+        {!loading && terms.trim() && results.length === 0 && !searchError && !error && (
           <p>No se encontraron usuarios.</p>
         )}
 
@@ -174,8 +116,9 @@ return (
 
           return (
             <article className="user-result" key={person.uid}>
+              <button className="profile-link" type="button" onClick={() => onOpenProfile(person)} aria-label={`Open ${displayName}'s profile`}>
               <img
-                src={person.photoURL || avatar}
+                src={person.customPhotoURL || person.photoURL || avatar}
                 alt=""
                 onError={(event) => {
                   event.currentTarget.src = avatar;
@@ -185,6 +128,7 @@ return (
                 <strong>{displayName}</strong>
                 <span>@{username}</span>
               </div>
+              </button>
               <button
                 type="button"
                 disabled={busyUid === person.uid}
